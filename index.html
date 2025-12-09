@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Assessment Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg: #f8fafc;
+            --bg-card: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --border-hover: #cbd5e1;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 24px 20px;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 32px 0;
+        }
+
+        .header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Progress Section */
+        .progress-section {
+            display: none;
+            margin-bottom: 24px;
+        }
+
+        .progress-section.active {
+            display: block;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .progress-text {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .progress-text strong {
+            color: var(--text-primary);
+        }
+
+        .timer {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            background: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+        }
+
+        .timer.warning {
+            color: #d97706;
+            border-color: #fcd34d;
+            background: #fffbeb;
+        }
+
+        .timer.danger {
+            color: #dc2626;
+            border-color: #fca5a5;
+            background: #fef2f2;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 20px;
+        }
+
+        /* Start Screen */
+        .start-screen .card {
+            text-align: center;
+        }
+
+        .start-screen h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .start-screen .description {
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            line-height: 1.7;
+        }
+
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .category {
+            padding: 12px 16px;
+            background: var(--bg);
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 14px 24px;
+            background: var(--primary);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+        }
+
+        /* Question Screen */
+        .question-screen {
+            display: none;
+        }
+
+        .question-screen.active {
+            display: block;
+        }
+
+        .instruction-box {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+        }
+
+        .instruction-box p {
+            color: #0369a1;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .instruction-box p:last-child {
+            margin-bottom: 0;
+            color: #0284c7;
+            font-size: 0.85rem;
+        }
+
+        .question-number {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+        }
+
+        .question-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .question-nepali {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+            margin-top: 12px;
+        }
+
+        /* Choice Buttons */
+        .choices {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .choice-btn {
+            padding: 20px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .choice-btn:hover {
+            border-color: var(--border-hover);
+            background: var(--bg);
+        }
+
+        .choice-btn.selected {
+            border-color: var(--primary);
+            background: #eff6ff;
+        }
+
+        .choice-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 12px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            background: var(--bg);
+        }
+
+        .choice-btn.selected .choice-icon {
+            background: var(--primary);
+            color: white;
+        }
+
+        .choice-label {
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+            color: var(--text-primary);
+        }
+
+        .choice-sub {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Navigation */
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-back {
+            padding: 12px 20px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-back:hover {
+            background: var(--bg);
+            border-color: var(--border-hover);
+        }
+
+        .btn-next {
+            flex: 1;
+            padding: 12px 24px;
+            background: var(--primary);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .btn-next:hover:not(:disabled) {
+            background: var(--primary-hover);
+        }
+
+        .btn-next:disabled {
+            background: #cbd5e1;
+            cursor: not-allowed;
+        }
+
+        /* Results Screen */
+        .results-screen {
+            display: none;
+        }
+
+        .results-screen.active {
+            display: block;
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .results-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .results-header p {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .code-display {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .code-letter {
+            width: 56px;
+            height: 56px;
+            background: var(--primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        /* Score Section */
+        .scores-card h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .score-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .score-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .score-letter {
+            width: 36px;
+            height: 36px;
+            background: var(--bg);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: var(--text-primary);
+        }
+
+        .score-details {
+            flex: 1;
+        }
+
+        .score-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+
+        .score-name {
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .score-value {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .score-bar {
+            height: 6px;
+            background: var(--border);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .score-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 3px;
+            transition: width 0.8s ease;
+        }
+
+        /* Type Cards */
+        .type-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .type-card {
+            border-left: 4px solid var(--primary);
+        }
+
+        .type-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .type-icon {
+            width: 44px;
+            height: 44px;
+            background: var(--bg);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .type-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .type-subtitle {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .type-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .careers-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+        }
+
+        .careers-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .career-tag {
+            padding: 6px 12px;
+            background: var(--bg);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .btn-restart {
+            width: 100%;
+            padding: 14px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-restart:hover {
+            background: var(--bg);
+            border-color: var(--border-hover);
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            background: white;
+            color: var(--text-primary);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-group input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 500px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 500px) {
+            .choices {
+                grid-template-columns: 1fr;
+            }
+
+            .categories {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Career Assessment</h1>
+            <p>Discover career paths that match your interests</p>
+        </header>
+
+        <div class="progress-section" id="progressSection">
+            <div class="progress-header">
+                <span class="progress-text">Question <strong id="currentQ">1</strong> of 42</span>
+                <div class="timer" id="timerDisplay">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span id="timerText">5:00</span>
+                </div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <!-- User Details Form -->
+        <div class="start-screen" id="userFormScreen">
+            <div class="card">
+                <h2>Welcome! Let's Get Started</h2>
+                <p class="description">
+                    Please provide your details before taking the career assessment.
+                </p>
+                <form id="userForm" onsubmit="submitUserForm(event)">
+                    <div class="form-group">
+                        <label for="fullName">Full Name / पूरा नाम *</label>
+                        <input type="text" id="fullName" name="fullName" required placeholder="Enter your full name">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address / इमेल *</label>
+                        <input type="email" id="email" name="email" required placeholder="Enter your email">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number / फोन नम्बर</label>
+                        <input type="tel" id="phone" name="phone" placeholder="Enter your phone number">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="age">Age / उमेर *</label>
+                            <input type="number" id="age" name="age" required min="10" max="100" placeholder="Age">
+                        </div>
+                        <div class="form-group">
+                            <label for="gender">Gender / लिङ्ग *</label>
+                            <select id="gender" name="gender" required>
+                                <option value="">Select</option>
+                                <option value="male">Male / पुरुष</option>
+                                <option value="female">Female / महिला</option>
+                                <option value="other">Other / अन्य</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="education">Education Level / शिक्षा *</label>
+                        <select id="education" name="education" required>
+                            <option value="">Select Education Level</option>
+                            <option value="school">School (Grade 1-10)</option>
+                            <option value="higher_secondary">Higher Secondary (+2/12)</option>
+                            <option value="bachelors">Bachelor's Degree</option>
+                            <option value="masters">Master's Degree</option>
+                            <option value="phd">PhD/Doctorate</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="occupation">Current Occupation / पेशा</label>
+                        <input type="text" id="occupation" name="occupation" placeholder="Student, Working, etc.">
+                    </div>
+                    <div class="form-group">
+                        <label for="location">Location / स्थान</label>
+                        <input type="text" id="location" name="location" placeholder="City, District">
+                    </div>
+                    <button type="submit" class="btn-primary">Continue to Assessment →</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Start Screen -->
+        <div class="start-screen" id="startScreen" style="display: none;">
+            <div class="card">
+                <h2>Find Your Ideal Career Path</h2>
+                <p class="description">
+                    Answer 42 questions to discover careers that align with your personality 
+                    and interests. Based on the Holland Code (RIASEC) model used by career counselors worldwide.
+                </p>
+                <div class="categories">
+                    <div class="category">R · Realistic</div>
+                    <div class="category">I · Investigative</div>
+                    <div class="category">A · Artistic</div>
+                    <div class="category">S · Social</div>
+                    <div class="category">E · Enterprising</div>
+                    <div class="category">C · Conventional</div>
+                </div>
+                <button class="btn-primary" onclick="startQuiz()">Start Assessment</button>
+            </div>
+        </div>
+
+        <!-- Question Screen -->
+        <div class="question-screen" id="questionScreen">
+            <div class="instruction-box">
+                <p>📋 Read each statement. If you agree with the statement, select "Yes". There are no wrong answers!</p>
+                <p>प्रत्येक कथन पढ्नुहोस्। यदि तपाईं सहमत हुनुहुन्छ भने, "हो" छान्नुहोस्। कुनै गलत जवाफ छैन!</p>
+            </div>
+
+            <div class="card">
+                <div class="question-number" id="questionLabel">Question 1</div>
+                <div class="question-text" id="questionText"></div>
+                <div class="question-nepali" id="questionTextNepali"></div>
+            </div>
+
+            <div class="choices">
+                <div class="choice-btn" id="agreeBtn" onclick="selectChoice(true)">
+                    <div class="choice-icon">✓</div>
+                    <div class="choice-label">Yes</div>
+                    <div class="choice-sub">This describes me</div>
+                </div>
+                <div class="choice-btn" id="disagreeBtn" onclick="selectChoice(false)">
+                    <div class="choice-icon">✗</div>
+                    <div class="choice-label">No</div>
+                    <div class="choice-sub">This doesn't describe me</div>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn-back" id="backBtn" onclick="prevQuestion()">← Back</button>
+                <button class="btn-next" id="nextBtn" onclick="nextQuestion()" disabled>Continue</button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div class="results-screen" id="resultsScreen"></div>
+    </div>
+
+    <script>
+        // Question data with RIASEC mapping and Nepali translations
+        const questions = [
+            { id: 1, text: "I like to work on cars", nepali: "मलाई गाडीमा काम गर्न मन पर्छ", type: "R" },
+            { id: 2, text: "I like to do puzzles", nepali: "मलाई पजल खेल्न मन पर्छ", type: "I" },
+            { id: 3, text: "I am good at working independently", nepali: "म स्वतन्त्र रूपमा काम गर्न राम्रो छु", type: "I" },
+            { id: 4, text: "I like to work in teams", nepali: "मलाई टोलीमा काम गर्न मन पर्छ", type: "S" },
+            { id: 5, text: "I am an ambitious person, I set goals for myself", nepali: "म एक महत्वाकांक्षी व्यक्ति हुँ, म आफ्नो लक्ष्य निर्धारण गर्छु", type: "E" },
+            { id: 6, text: "I like to organize things (files, desks/offices)", nepali: "मलाई चीजहरू व्यवस्थित गर्न मन पर्छ (फाइलहरू, डेस्क/कार्यालयहरू)", type: "C" },
+            { id: 7, text: "I like to build things", nepali: "मलाई चीजहरू बनाउन मन पर्छ", type: "R" },
+            { id: 8, text: "I like to read about art and music", nepali: "मलाई कला र संगीतको बारेमा पढ्न मन पर्छ", type: "A" },
+            { id: 9, text: "I like to have clear instructions to follow", nepali: "मलाई स्पष्ट निर्देशनहरू पालना गर्न मन पर्छ", type: "C" },
+            { id: 10, text: "I like to try to influence or persuade people", nepali: "मलाई मानिसहरूलाई प्रभाव पार्न वा मनाउन प्रयास गर्न मन पर्छ", type: "E" },
+            { id: 11, text: "I like to do experiments", nepali: "मलाई प्रयोगहरू गर्न मन पर्छ", type: "I" },
+            { id: 12, text: "I like to teach or train people", nepali: "मलाई मानिसहरूलाई सिकाउन वा तालिम दिन मन पर्छ", type: "S" },
+            { id: 13, text: "I like trying to help people solve their problems", nepali: "मलाई मानिसहरूको समस्या समाधान गर्न मद्दत गर्न मन पर्छ", type: "S" },
+            { id: 14, text: "I like to take care of animals", nepali: "मलाई जनावरहरूको हेरचाह गर्न मन पर्छ", type: "R" },
+            { id: 15, text: "I wouldn't mind working 8 hours per day in an office", nepali: "मलाई कार्यालयमा दिनको ८ घण्टा काम गर्न कुनै आपत्ति छैन", type: "C" },
+            { id: 16, text: "I like selling things", nepali: "मलाई चीजहरू बेच्न मन पर्छ", type: "E" },
+            { id: 17, text: "I enjoy creative writing", nepali: "मलाई सिर्जनात्मक लेखन गर्न रमाइलो लाग्छ", type: "A" },
+            { id: 18, text: "I enjoy science", nepali: "मलाई विज्ञान मन पर्छ", type: "I" },
+            { id: 19, text: "I am quick to take on new responsibilities", nepali: "म नयाँ जिम्मेवारीहरू चाँडै लिन्छु", type: "E" },
+            { id: 20, text: "I am interested in healing people", nepali: "मलाई मानिसहरूलाई निको पार्नमा रुचि छ", type: "S" },
+            { id: 21, text: "I enjoy trying to figure out how things work", nepali: "म चीजहरू कसरी काम गर्छन् भनेर पत्ता लगाउन रमाउँछु", type: "I" },
+            { id: 22, text: "I like putting things together or assembling things", nepali: "मलाई चीजहरू जोड्न वा संयोजन गर्न मन पर्छ", type: "R" },
+            { id: 23, text: "I am a creative person", nepali: "म एक सिर्जनशील व्यक्ति हुँ", type: "A" },
+            { id: 24, text: "I pay attention to details", nepali: "म विवरणहरूमा ध्यान दिन्छु", type: "C" },
+            { id: 25, text: "I like to do filing or typing", nepali: "मलाई फाइलिङ वा टाइपिङ गर्न मन पर्छ", type: "C" },
+            { id: 26, text: "I like to analyze things (problems/situations)", nepali: "मलाई चीजहरू (समस्या/परिस्थिति) विश्लेषण गर्न मन पर्छ", type: "I" },
+            { id: 27, text: "I like to play instruments or sing", nepali: "मलाई वाद्ययन्त्र बजाउन वा गाउन मन पर्छ", type: "A" },
+            { id: 28, text: "I enjoy learning about other cultures", nepali: "मलाई अन्य संस्कृतिहरूको बारेमा सिक्न रमाइलो लाग्छ", type: "S" },
+            { id: 29, text: "I would like to start my own business", nepali: "म आफ्नै व्यवसाय सुरु गर्न चाहन्छु", type: "E" },
+            { id: 30, text: "I like to cook", nepali: "मलाई खाना पकाउन मन पर्छ", type: "R" },
+            { id: 31, text: "I like acting in plays", nepali: "मलाई नाटकमा अभिनय गर्न मन पर्छ", type: "A" },
+            { id: 32, text: "I am a practical person", nepali: "म एक व्यावहारिक व्यक्ति हुँ", type: "R" },
+            { id: 33, text: "I like working with numbers or charts", nepali: "मलाई संख्या वा चार्टसँग काम गर्न मन पर्छ", type: "C" },
+            { id: 34, text: "I like to get into discussions about issues", nepali: "मलाई मुद्दाहरूको बारेमा छलफलमा संलग्न हुन मन पर्छ", type: "S" },
+            { id: 35, text: "I am good at keeping records of my work", nepali: "म आफ्नो कामको रेकर्ड राख्नमा राम्रो छु", type: "C" },
+            { id: 36, text: "I like to lead", nepali: "मलाई नेतृत्व गर्न मन पर्छ", type: "E" },
+            { id: 37, text: "I like working outdoors", nepali: "मलाई बाहिर काम गर्न मन पर्छ", type: "R" },
+            { id: 38, text: "I would like to work in an office", nepali: "म कार्यालयमा काम गर्न चाहन्छु", type: "C" },
+            { id: 39, text: "I'm good at math", nepali: "म गणितमा राम्रो छु", type: "I" },
+            { id: 40, text: "I like helping people", nepali: "मलाई मानिसहरूलाई मद्दत गर्न मन पर्छ", type: "S" },
+            { id: 41, text: "I like to draw", nepali: "मलाई चित्र बनाउन मन पर्छ", type: "A" },
+            { id: 42, text: "I like to give speeches", nepali: "मलाई भाषण दिन मन पर्छ", type: "E" }
+        ];
+
+        // Type descriptions
+        const typeInfo = {
+            R: {
+                name: "Realistic",
+                subtitle: "The Doer",
+                description: "You excel at hands-on work and enjoy building, fixing, or working with tools and machines. You're practical, action-oriented, and prefer tangible results over abstract theories.",
+                careers: ["Engineering", "Construction", "Agriculture", "Mechanic", "Chef", "Health Assistant", "Computer Tech"]
+            },
+            I: {
+                name: "Investigative",
+                subtitle: "The Thinker",
+                description: "You love analyzing problems and conducting research. Intellectual challenges energize you, and you excel at working with ideas, data, and complex concepts.",
+                careers: ["Scientist", "Doctor", "Psychologist", "Software Developer", "Data Analyst", "Marine Biologist", "Researcher"]
+            },
+            A: {
+                name: "Artistic",
+                subtitle: "The Creator",
+                description: "You thrive in unstructured environments where creativity flows freely. Self-expression is important to you, and you bring originality and innovation to everything you do.",
+                careers: ["Graphic Designer", "Writer", "Musician", "Photographer", "Architect", "Actor", "Interior Designer"]
+            },
+            S: {
+                name: "Social",
+                subtitle: "The Helper",
+                description: "You're drawn to working with people and making a positive impact on their lives. Empathy comes naturally, and you excel at understanding and meeting others' needs.",
+                careers: ["Teacher", "Nurse", "Counselor", "Social Worker", "Physical Therapist", "HR Manager", "Public Relations"]
+            },
+            E: {
+                name: "Enterprising",
+                subtitle: "The Persuader",
+                description: "You're ambitious, competitive, and love taking charge. Leadership energizes you, and you thrive in dynamic environments where you can influence and inspire others.",
+                careers: ["Entrepreneur", "Marketing Manager", "Lawyer", "Sales Director", "Political Scientist", "Real Estate Agent", "Financial Advisor"]
+            },
+            C: {
+                name: "Conventional",
+                subtitle: "The Organizer",
+                description: "You excel at creating order and working with data. Detail-oriented and reliable, you thrive in structured environments with clear expectations and procedures.",
+                careers: ["Accountant", "Administrator", "Data Processor", "Bank Teller", "Medical Records", "Insurance Agent", "Court Reporter"]
+            }
+        };
+
+        // State
+        let currentQuestion = 0;
+        let answers = {};
+        let currentSelection = null;
+        let timerInterval = null;
+        let timeRemaining = 300;
+        let userData = {};
+        let userSessionId = null;
+
+        async function submitUserForm(event) {
+            event.preventDefault();
+            
+            // Collect user data
+            userData = {
+                fullName: document.getElementById('fullName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                age: document.getElementById('age').value,
+                gender: document.getElementById('gender').value,
+                education: document.getElementById('education').value,
+                occupation: document.getElementById('occupation').value,
+                location: document.getElementById('location').value
+            };
+            
+            // Save user registration (incomplete assessment)
+            try {
+                const response = await fetch('/api/register-user', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(userData)
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    userSessionId = result.sessionId;
+                }
+            } catch (error) {
+                console.error('Error registering user:', error);
+            }
+            
+            // Hide form, show quiz intro
+            document.getElementById('userFormScreen').style.display = 'none';
+            document.getElementById('startScreen').style.display = 'block';
+        }
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function updateTimerDisplay() {
+            const timerDisplay = document.getElementById('timerDisplay');
+            const timerText = document.getElementById('timerText');
+            timerText.textContent = formatTime(timeRemaining);
+            
+            timerDisplay.classList.remove('warning', 'danger');
+            if (timeRemaining <= 60) {
+                timerDisplay.classList.add('danger');
+            } else if (timeRemaining <= 120) {
+                timerDisplay.classList.add('warning');
+            }
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+                
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    showResults();
+                }
+            }, 1000);
+        }
+
+        function stopTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+        }
+
+        function startQuiz() {
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('questionScreen').classList.add('active');
+            document.getElementById('progressSection').classList.add('active');
+            timeRemaining = 300;
+            updateTimerDisplay();
+            startTimer();
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const question = questions[currentQuestion];
+            
+            document.getElementById('questionLabel').textContent = `Question ${currentQuestion + 1}`;
+            document.getElementById('questionText').textContent = question.text;
+            document.getElementById('questionTextNepali').textContent = question.nepali;
+            document.getElementById('currentQ').textContent = currentQuestion + 1;
+            
+            // Update progress
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            
+            // Reset selection for fresh start
+            currentSelection = null;
+            if (answers[question.id] !== undefined) {
+                currentSelection = answers[question.id];
+            }
+            updateChoiceUI();
+            
+            // Update buttons
+            document.getElementById('backBtn').style.visibility = currentQuestion === 0 ? 'hidden' : 'visible';
+            document.getElementById('nextBtn').disabled = currentSelection === null;
+            document.getElementById('nextBtn').textContent = currentQuestion === questions.length - 1 ? 'See Results' : 'Continue';
+        }
+
+        function selectChoice(agree) {
+            currentSelection = agree;
+            answers[questions[currentQuestion].id] = agree;
+            updateChoiceUI();
+            document.getElementById('nextBtn').disabled = false;
+
+            setTimeout(() => {
+                if (currentQuestion < questions.length - 1) {
+                    nextQuestion();
+                }
+            }, 300);
+        }
+
+        function updateChoiceUI() {
+            const agreeBtn = document.getElementById('agreeBtn');
+            const disagreeBtn = document.getElementById('disagreeBtn');
+            
+            agreeBtn.classList.toggle('selected', currentSelection === true);
+            disagreeBtn.classList.toggle('selected', currentSelection === false);
+        }
+
+        function nextQuestion() {
+            if (currentSelection === null) return;
+            
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                renderQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                renderQuestion();
+            }
+        }
+
+        function calculateScores() {
+            const scores = { R: 0, I: 0, A: 0, S: 0, E: 0, C: 0 };
+            
+            questions.forEach(q => {
+                if (answers[q.id] === true) {
+                    scores[q.type]++;
+                }
+            });
+            
+            return scores;
+        }
+
+        function getMaxScore(type) {
+            return questions.filter(q => q.type === type).length;
+        }
+
+        function showResults() {
+            stopTimer();
+            document.getElementById('questionScreen').classList.remove('active');
+            document.getElementById('progressSection').classList.remove('active');
+            document.getElementById('resultsScreen').classList.add('active');
+            
+            const scores = calculateScores();
+            const sortedTypes = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+            const topThree = sortedTypes.slice(0, 3).map(([type]) => type);
+            
+            // Save to database
+            saveToDatabase(scores, topThree);
+            
+            // Generate score rows
+            const scoreRowsHTML = sortedTypes.map(([type, score]) => {
+                const maxScore = getMaxScore(type);
+                const percentage = (score / maxScore) * 100;
+                return `
+                    <div class="score-item">
+                        <div class="score-letter">${type}</div>
+                        <div class="score-details">
+                            <div class="score-header">
+                                <span class="score-name">${typeInfo[type].name}</span>
+                                <span class="score-value">${score}/${maxScore}</span>
+                            </div>
+                            <div class="score-bar">
+                                <div class="score-fill" style="width: ${percentage}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Generate type cards for top 3
+            const typeCardsHTML = topThree.map(type => {
+                const info = typeInfo[type];
+                return `
+                    <div class="card type-card">
+                        <div class="type-card-header">
+                            <div class="type-icon">${type}</div>
+                            <div>
+                                <div class="type-title">${info.name}</div>
+                                <div class="type-subtitle">${info.subtitle}</div>
+                            </div>
+                        </div>
+                        <p class="type-desc">${info.description}</p>
+                        <div class="careers-label">Suggested Careers</div>
+                        <div class="careers-list">
+                            ${info.careers.map(c => `<span class="career-tag">${c}</span>`).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('resultsScreen').innerHTML = `
+                <div class="card results-header">
+                    <h2>Your Results</h2>
+                    <p>Your interest code is:</p>
+                    <div class="code-display">
+                        ${topThree.map(t => `<div class="code-letter">${t}</div>`).join('')}
+                    </div>
+                </div>
+
+                <div class="card scores-card">
+                    <h3>Score Breakdown</h3>
+                    ${scoreRowsHTML}
+                </div>
+
+                <div class="type-cards">
+                    ${typeCardsHTML}
+                </div>
+
+                <button class="btn-primary" onclick="downloadPDF()" style="margin-bottom: 12px;">
+                    📄 Download Report (PDF)
+                </button>
+                <button class="btn-restart" onclick="restartQuiz()">Take Assessment Again</button>
+            `;
+        }
+
+        async function downloadPDF() {
+            const scores = calculateScores();
+            const sortedTypes = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+            const topThree = sortedTypes.slice(0, 3).map(([type]) => type);
+            
+            const reportData = {
+                fullName: userData.fullName,
+                email: userData.email,
+                phone: userData.phone,
+                age: userData.age,
+                gender: userData.gender,
+                education: userData.education,
+                occupation: userData.occupation,
+                location: userData.location,
+                scores: scores,
+                topThreeCode: topThree.join(''),
+                date: new Date().toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                })
+            };
+            
+            try {
+                const response = await fetch('/api/generate-pdf', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(reportData)
+                });
+                
+                if (response.ok) {
+                    const html = await response.text();
+                    // Open in new window for printing
+                    const printWindow = window.open('', '_blank');
+                    printWindow.document.write(html);
+                    printWindow.document.close();
+                } else {
+                    alert('Failed to generate report. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error generating report:', error);
+                alert('Failed to generate report. Please try again.');
+            }
+        }
+
+        async function saveToDatabase(scores, topThree) {
+            const quizData = {
+                sessionId: userSessionId,
+                // User details
+                fullName: userData.fullName,
+                email: userData.email,
+                phone: userData.phone,
+                age: userData.age,
+                gender: userData.gender,
+                education: userData.education,
+                occupation: userData.occupation,
+                location: userData.location,
+                // Quiz results
+                answers: answers,
+                scores: scores,
+                topThreeCode: topThree.join(''),
+                timeTaken: 300 - timeRemaining,
+                completedAt: new Date().toISOString()
+            };
+            
+            try {
+                const response = await fetch('/api/save-quiz', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(quizData)
+                });
+                
+                if (!response.ok) {
+                    console.error('Failed to save quiz results');
+                }
+            } catch (error) {
+                console.error('Error saving to database:', error);
+            }
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            answers = {};
+            currentSelection = null;
+            stopTimer();
+            timeRemaining = 300;
+            
+            document.getElementById('resultsScreen').classList.remove('active');
+            document.getElementById('resultsScreen').innerHTML = '';
+            document.getElementById('startScreen').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

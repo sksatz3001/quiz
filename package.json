@@ -1,0 +1,21 @@
+{
+  "name": "riasec-quiz",
+  "version": "1.0.0",
+  "description": "RIASEC Career Discovery Quiz with Nepali translations",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "pg": "^8.11.3"
+  },
+  "keywords": [
+    "quiz",
+    "riasec",
+    "career",
+    "nepali"
+  ],
+  "author": "",
+  "license": "ISC"
+}
