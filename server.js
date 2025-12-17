@@ -135,11 +135,11 @@ function generatePDFContent(data) {
     const sortedTypes = Object.entries(scores).sort((a, b) => b[1] - a[1]);
     
     return `<!DOCTYPE html>
-<html lang="en">
+<html lang="ne">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RIASEC Career Assessment Report - ${data.fullName}</title>
+    <title>क्यारियर मूल्यांकन प्रतिवेदन - ${data.fullName}</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; background: white; padding: 40px; }
@@ -177,38 +177,38 @@ function generatePDFContent(data) {
 <body>
     <div class="report">
         <div class="header">
-            <h1>RIASEC Career Assessment Report</h1>
-            <h2>Holland Code Interest Inventory</h2>
+            <h1>क्यारियर मूल्यांकन प्रतिवेदन</h1>
+            <h2>RIASEC - होल्याण्ड कोड रुचि सूची</h2>
             <p class="subtitle">व्यावसायिक रुचि मूल्यांकन प्रतिवेदन</p>
         </div>
         
         <div class="section">
-            <div class="section-title">Personal Information / व्यक्तिगत जानकारी</div>
+            <div class="section-title">व्यक्तिगत जानकारी</div>
             <div class="user-info">
-                <div class="info-item"><div class="info-label">Full Name / पूरा नाम</div><div class="info-value">${data.fullName}</div></div>
-                <div class="info-item"><div class="info-label">Email / इमेल</div><div class="info-value">${data.email}</div></div>
-                <div class="info-item"><div class="info-label">Phone / फोन</div><div class="info-value">${data.phone}</div></div>
-                <div class="info-item"><div class="info-label">Age / उमेर</div><div class="info-value">${data.age}</div></div>
-                <div class="info-item"><div class="info-label">Gender / लिङ्ग</div><div class="info-value">${data.gender}</div></div>
-                <div class="info-item"><div class="info-label">Education / शिक्षा</div><div class="info-value">${data.education}</div></div>
-                <div class="info-item"><div class="info-label">Occupation / पेशा</div><div class="info-value">${data.occupation}</div></div>
-                <div class="info-item"><div class="info-label">Location / स्थान</div><div class="info-value">${data.location}</div></div>
+                <div class="info-item"><div class="info-label">पूरा नाम</div><div class="info-value">${data.fullName}</div></div>
+                <div class="info-item"><div class="info-label">इमेल</div><div class="info-value">${data.email}</div></div>
+                <div class="info-item"><div class="info-label">फोन</div><div class="info-value">${data.phone}</div></div>
+                <div class="info-item"><div class="info-label">उमेर</div><div class="info-value">${data.age}</div></div>
+                <div class="info-item"><div class="info-label">लिङ्ग</div><div class="info-value">${data.gender === 'male' ? 'पुरुष' : data.gender === 'female' ? 'महिला' : 'अन्य'}</div></div>
+                <div class="info-item"><div class="info-label">शिक्षा</div><div class="info-value">${data.education}</div></div>
+                <div class="info-item"><div class="info-label">पेशा</div><div class="info-value">${data.occupation}</div></div>
+                <div class="info-item"><div class="info-label">स्थान</div><div class="info-value">${data.location}</div></div>
             </div>
         </div>
         
         <div class="section">
-            <div class="section-title">Your Holland Code / तपाईंको होल्याण्ड कोड</div>
+            <div class="section-title">तपाईंको होल्याण्ड कोड</div>
             <div class="holland-code">
-                <h3>TOP THREE INTEREST TYPES</h3>
+                <h3>शीर्ष तीन रुचि प्रकारहरू</h3>
                 <div class="code-letters">${topThree.join('')}</div>
             </div>
         </div>
         
         <div class="section">
-            <div class="section-title">Detailed Scores / विस्तृत स्कोर</div>
+            <div class="section-title">विस्तृत स्कोर</div>
             <table class="scores-table">
                 <thead>
-                    <tr><th>Type</th><th>Name / नाम</th><th>Score</th><th>Visual</th></tr>
+                    <tr><th>प्रकार</th><th>नाम</th><th>स्कोर</th><th>दृश्य</th></tr>
                 </thead>
                 <tbody>
                     ${sortedTypes.map(([type, score], index) => `
@@ -224,7 +224,7 @@ function generatePDFContent(data) {
         </div>
         
         <div class="section">
-            <div class="section-title">Career Suggestions / क्यारियर सुझावहरू</div>
+            <div class="section-title">क्यारियर सुझावहरू</div>
             ${topThree.map((type, index) => `
                 <div class="career-section">
                     <div class="career-type">${index + 1}. ${riasecDescriptions[type].name} (${type}) - ${riasecDescriptions[type].nepali}</div>
@@ -234,13 +234,13 @@ function generatePDFContent(data) {
         </div>
         
         <div class="footer">
-            <p>Report Generated: ${new Date().toLocaleString()}</p>
-            <p>RIASEC Career Assessment Tool | Holland Code Interest Inventory</p>
-            <p>This report is for guidance purposes only and should be used alongside professional career counseling.</p>
+            <p>प्रतिवेदन उत्पन्न मिति: ${new Date().toLocaleString('ne-NP')}</p>
+            <p>RIASEC क्यारियर मूल्यांकन उपकरण | होल्याण्ड कोड रुचि सूची</p>
+            <p>यो प्रतिवेदन मार्गदर्शनको लागि मात्र हो र पेशेवर क्यारियर परामर्शको साथमा प्रयोग गर्नुपर्छ।</p>
         </div>
     </div>
     
-    <button class="print-button" onclick="window.print()">🖨️ Print / Save as PDF</button>
+    <button class="print-button" onclick="window.print()">🖨️ प्रिन्ट गर्नुहोस् / PDF सुरक्षित गर्नुहोस्</button>
 </body>
 </html>`;
 }
