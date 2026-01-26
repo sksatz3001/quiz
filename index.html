@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ne">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Career Assessment Quiz</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>क्यारियर मूल्यांकन परीक्षा - RIASEC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -130,8 +130,95 @@
             margin-bottom: 20px;
         }
 
+        /* Language Selector */
+        .language-screen {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .language-screen .card {
+            text-align: center;
+            max-width: 480px;
+            width: 100%;
+        }
+
+        .language-screen h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .language-screen p {
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        .language-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .language-btn {
+            padding: 24px 20px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .language-btn:hover {
+            border-color: var(--primary);
+            background: #f0f7ff;
+        }
+
+        .language-btn.selected {
+            border-color: var(--primary);
+            background: #eff6ff;
+        }
+
+        .language-btn .flag {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+        }
+
+        .language-btn .lang-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .language-btn .lang-native {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
         /* Start Screen */
-        .start-screen .card {
+        .start-screen {
+            display: none;
+        }
+
+        .start-screen.active {
+            display: block;
+        }
+
+        /* User Form Screen */
+        .user-form-screen {
+            display: block;
+        }
+
+        .user-form-screen.hidden {
+            display: none;
+        }
+
+        .start-screen .card,
+        .user-form-screen .card {
             text-align: center;
         }
 
@@ -536,6 +623,23 @@
             border-color: var(--border-hover);
         }
 
+        /* Loading Spinner */
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s ease-in-out infinite;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
         /* Form Styles */
         .form-group {
             margin-bottom: 20px;
@@ -604,21 +708,36 @@
 </head>
 <body>
     <div class="container">
+        <!-- Language Selection Screen -->
+        <div class="language-screen" id="languageScreen">
+            <div class="card">
+                <h2>Select Your Language</h2>
+                <p>भाषा छान्नुहोस्</p>
+                <div class="language-options">
+                    <div class="language-btn" onclick="selectLanguage('en')">
+                        <div class="flag">🇬🇧</div>
+                        <div class="lang-name">English</div>
+                        <div class="lang-native">English</div>
+                    </div>
+                    <div class="language-btn" onclick="selectLanguage('ne')">
+                        <div class="flag">🇳🇵</div>
+                        <div class="lang-name">नेपाली</div>
+                        <div class="lang-native">Nepali</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="mainContent" style="display: none;">
         <header class="header">
-            <h1>Career Assessment</h1>
-            <p>Discover career paths that match your interests</p>
+            <h1 id="headerTitle">क्यारियर मूल्यांकन</h1>
+            <p id="headerSubtitle">तपाईंको रुचि अनुसारको क्यारियर पत्ता लगाउनुहोस्</p>
         </header>
 
         <div class="progress-section" id="progressSection">
             <div class="progress-header">
-                <span class="progress-text">Question <strong id="currentQ">1</strong> of 42</span>
-                <div class="timer" id="timerDisplay">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <polyline points="12 6 12 12 16 14"></polyline>
-                    </svg>
-                    <span id="timerText">5:00</span>
-                </div>
+                <span class="progress-text">प्रश्न <strong id="currentQ">१</strong> / ४२</span>
+                <!-- Timer removed as per client request - no time limit -->
             </div>
             <div class="progress-bar">
                 <div class="progress-fill" id="progressFill"></div>
@@ -626,122 +745,410 @@
         </div>
 
         <!-- User Details Form -->
-        <div class="start-screen" id="userFormScreen">
+        <div class="user-form-screen" id="userFormScreen">
             <div class="card">
-                <h2>Welcome! Let's Get Started</h2>
+                <h2>स्वागत छ! सुरु गरौं</h2>
                 <p class="description">
-                    Please provide your details before taking the career assessment.
+                    क्यारियर मूल्यांकन लिनु अघि कृपया आफ्नो विवरण भर्नुहोस्।
                 </p>
                 <form id="userForm" onsubmit="submitUserForm(event)">
                     <div class="form-group">
-                        <label for="fullName">Full Name / पूरा नाम *</label>
-                        <input type="text" id="fullName" name="fullName" required placeholder="Enter your full name">
+                        <label for="fullName">पूरा नाम *</label>
+                        <input type="text" id="fullName" name="fullName" required placeholder="तपाईंको पूरा नाम लेख्नुहोस्">
                     </div>
                     <div class="form-group">
-                        <label for="email">Email Address / इमेल *</label>
-                        <input type="email" id="email" name="email" required placeholder="Enter your email">
+                        <label for="email">इमेल ठेगाना *</label>
+                        <input type="email" id="email" name="email" required placeholder="तपाईंको इमेल लेख्नुहोस्">
                     </div>
                     <div class="form-group">
-                        <label for="phone">Phone Number / फोन नम्बर</label>
-                        <input type="tel" id="phone" name="phone" placeholder="Enter your phone number">
+                        <label for="phone">फोन नम्बर</label>
+                        <input type="tel" id="phone" name="phone" placeholder="तपाईंको फोन नम्बर लेख्नुहोस्">
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="age">Age / उमेर *</label>
-                            <input type="number" id="age" name="age" required min="10" max="100" placeholder="Age">
+                            <label for="age">उमेर *</label>
+                            <input type="number" id="age" name="age" required min="10" max="100" placeholder="उमेर">
                         </div>
                         <div class="form-group">
-                            <label for="gender">Gender / लिङ्ग *</label>
+                            <label for="gender">लिङ्ग *</label>
                             <select id="gender" name="gender" required>
-                                <option value="">Select</option>
-                                <option value="male">Male / पुरुष</option>
-                                <option value="female">Female / महिला</option>
-                                <option value="other">Other / अन्य</option>
+                                <option value="">छान्नुहोस्</option>
+                                <option value="male">पुरुष</option>
+                                <option value="female">महिला</option>
+                                <option value="other">अन्य</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="education">Education Level / शिक्षा *</label>
+                        <label for="education">शिक्षा स्तर *</label>
                         <select id="education" name="education" required>
-                            <option value="">Select Education Level</option>
-                            <option value="school">School (Grade 1-10)</option>
-                            <option value="higher_secondary">Higher Secondary (+2/12)</option>
-                            <option value="bachelors">Bachelor's Degree</option>
-                            <option value="masters">Master's Degree</option>
-                            <option value="phd">PhD/Doctorate</option>
-                            <option value="other">Other</option>
+                            <option value="">शिक्षा स्तर छान्नुहोस्</option>
+                            <option value="school">विद्यालय (कक्षा १-१०)</option>
+                            <option value="higher_secondary">उच्च माध्यमिक (+२/१२)</option>
+                            <option value="bachelors">स्नातक तह</option>
+                            <option value="masters">स्नातकोत्तर तह</option>
+                            <option value="phd">पीएचडी/विद्यावारिधि</option>
+                            <option value="other">अन्य</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="occupation">Current Occupation / पेशा</label>
-                        <input type="text" id="occupation" name="occupation" placeholder="Student, Working, etc.">
+                        <label for="occupation">हालको पेशा</label>
+                        <input type="text" id="occupation" name="occupation" placeholder="विद्यार्थी, कर्मचारी, आदि">
                     </div>
                     <div class="form-group">
-                        <label for="location">Location / स्थान</label>
-                        <input type="text" id="location" name="location" placeholder="City, District">
+                        <label for="location">स्थान</label>
+                        <input type="text" id="location" name="location" placeholder="शहर, जिल्ला">
                     </div>
-                    <button type="submit" class="btn-primary">Continue to Assessment →</button>
+                    <button type="submit" class="btn-primary">मूल्यांकनमा जानुहोस् →</button>
                 </form>
             </div>
         </div>
 
         <!-- Start Screen -->
-        <div class="start-screen" id="startScreen" style="display: none;">
+        <div class="start-screen" id="startScreen">
             <div class="card">
-                <h2>Find Your Ideal Career Path</h2>
+                <h2>आफ्नो उपयुक्त क्यारियर बाटो पत्ता लगाउनुहोस्</h2>
                 <p class="description">
-                    Answer 42 questions to discover careers that align with your personality 
-                    and interests. Based on the Holland Code (RIASEC) model used by career counselors worldwide.
+                    तपाईंको व्यक्तित्व र रुचि अनुसारको क्यारियर पत्ता लगाउन ४२ प्रश्नहरूको जवाफ दिनुहोस्।
+                    यो विश्वभरका क्यारियर परामर्शदाताहरूले प्रयोग गर्ने होल्याण्ड कोड (RIASEC) मोडेलमा आधारित छ।
                 </p>
                 <div class="categories">
-                    <div class="category">R · Realistic</div>
-                    <div class="category">I · Investigative</div>
-                    <div class="category">A · Artistic</div>
-                    <div class="category">S · Social</div>
-                    <div class="category">E · Enterprising</div>
-                    <div class="category">C · Conventional</div>
+                    <div class="category">R · यथार्थवादी</div>
+                    <div class="category">I · अन्वेषणात्मक</div>
+                    <div class="category">A · कलात्मक</div>
+                    <div class="category">S · सामाजिक</div>
+                    <div class="category">E · उद्यमशील</div>
+                    <div class="category">C · परम्परागत</div>
                 </div>
-                <button class="btn-primary" onclick="startQuiz()">Start Assessment</button>
+                <button class="btn-primary" onclick="startQuiz()">मूल्यांकन सुरु गर्नुहोस्</button>
             </div>
         </div>
 
         <!-- Question Screen -->
         <div class="question-screen" id="questionScreen">
             <div class="instruction-box">
-                <p>📋 Read each statement. If you agree with the statement, select "Yes". There are no wrong answers!</p>
-                <p>प्रत्येक कथन पढ्नुहोस्। यदि तपाईं सहमत हुनुहुन्छ भने, "हो" छान्नुहोस्। कुनै गलत जवाफ छैन!</p>
+                <p>📋 प्रत्येक कथन पढ्नुहोस्। यदि तपाईं सहमत हुनुहुन्छ भने, "हो" छान्नुहोस्। कुनै गलत जवाफ छैन!</p>
             </div>
 
             <div class="card">
-                <div class="question-number" id="questionLabel">Question 1</div>
+                <div class="question-number" id="questionLabel">प्रश्न १</div>
                 <div class="question-text" id="questionText"></div>
-                <div class="question-nepali" id="questionTextNepali"></div>
             </div>
 
             <div class="choices">
                 <div class="choice-btn" id="agreeBtn" onclick="selectChoice(true)">
-                    <div class="choice-icon">✓</div>
-                    <div class="choice-label">Yes</div>
-                    <div class="choice-sub">This describes me</div>
+                    <div class="choice-icon">👍</div>
+                    <div class="choice-label">हो</div>
+                    <div class="choice-sub">यो मलाई वर्णन गर्छ</div>
                 </div>
                 <div class="choice-btn" id="disagreeBtn" onclick="selectChoice(false)">
-                    <div class="choice-icon">✗</div>
-                    <div class="choice-label">No</div>
-                    <div class="choice-sub">This doesn't describe me</div>
+                    <div class="choice-icon">👎</div>
+                    <div class="choice-label">होइन</div>
+                    <div class="choice-sub">यो मलाई वर्णन गर्दैन</div>
                 </div>
             </div>
 
             <div class="nav-buttons">
-                <button class="btn-back" id="backBtn" onclick="prevQuestion()">← Back</button>
-                <button class="btn-next" id="nextBtn" onclick="nextQuestion()" disabled>Continue</button>
+                <button class="btn-back" id="backBtn" onclick="prevQuestion()">← पछाडि</button>
+                <button class="btn-next" id="nextBtn" onclick="nextQuestion()" disabled>अगाडि बढ्नुहोस्</button>
             </div>
         </div>
 
         <!-- Results Screen -->
         <div class="results-screen" id="resultsScreen"></div>
+        </div><!-- End mainContent -->
     </div>
 
     <script>
+        // Current language state
+        let currentLang = 'ne'; // Default to Nepali
+
+        // Translation strings
+        const translations = {
+            en: {
+                headerTitle: 'Career Assessment',
+                headerSubtitle: 'Discover careers that match your interests',
+                formWelcome: 'Welcome! Let\'s Get Started',
+                formDescription: 'Please fill in your details before taking the career assessment.',
+                fullName: 'Full Name *',
+                fullNamePlaceholder: 'Enter your full name',
+                email: 'Email Address *',
+                emailPlaceholder: 'Enter your email',
+                phone: 'Phone Number',
+                phonePlaceholder: 'Enter your phone number',
+                age: 'Age *',
+                agePlaceholder: 'Age',
+                gender: 'Gender *',
+                genderSelect: 'Select',
+                male: 'Male',
+                female: 'Female',
+                other: 'Other',
+                education: 'Education Level *',
+                educationSelect: 'Select education level',
+                school: 'School (Class 1-10)',
+                higherSecondary: 'Higher Secondary (+2/12)',
+                bachelors: 'Bachelor\'s Degree',
+                masters: 'Master\'s Degree',
+                phd: 'PhD/Doctorate',
+                occupation: 'Current Occupation',
+                occupationPlaceholder: 'Student, Employee, etc.',
+                location: 'Location',
+                locationPlaceholder: 'City, District',
+                proceedBtn: 'Proceed to Assessment →',
+                startTitle: 'Discover Your Ideal Career Path',
+                startDescription: 'Answer 42 questions to find careers that match your personality and interests. This is based on the Holland Code (RIASEC) model used by career counselors worldwide.',
+                startBtn: 'Start Assessment',
+                instruction: '📋 Read each statement. If you agree, choose "Yes". There are no wrong answers!',
+                questionLabel: 'Question',
+                yes: 'Yes',
+                yesDesc: 'This describes me',
+                no: 'No',
+                noDesc: 'This does not describe me',
+                back: '← Back',
+                next: 'Continue',
+                viewResults: 'View Results',
+                yourResult: 'Your Result',
+                yourCode: 'Your interest code is:',
+                scoreDetails: 'Score Details',
+                suggestedCareers: 'Suggested Careers',
+                downloadReport: '📄 Download Report (PDF)',
+                retakeTest: 'Retake Assessment',
+                categories: {
+                    R: 'R · Realistic',
+                    I: 'I · Investigative',
+                    A: 'A · Artistic',
+                    S: 'S · Social',
+                    E: 'E · Enterprising',
+                    C: 'C · Conventional'
+                }
+            },
+            ne: {
+                headerTitle: 'क्यारियर मूल्यांकन',
+                headerSubtitle: 'तपाईंको रुचि अनुसारको क्यारियर पत्ता लगाउनुहोस्',
+                formWelcome: 'स्वागत छ! सुरु गरौं',
+                formDescription: 'क्यारियर मूल्यांकन लिनु अघि कृपया आफ्नो विवरण भर्नुहोस्।',
+                fullName: 'पूरा नाम *',
+                fullNamePlaceholder: 'तपाईंको पूरा नाम लेख्नुहोस्',
+                email: 'इमेल ठेगाना *',
+                emailPlaceholder: 'तपाईंको इमेल लेख्नुहोस्',
+                phone: 'फोन नम्बर',
+                phonePlaceholder: 'तपाईंको फोन नम्बर लेख्नुहोस्',
+                age: 'उमेर *',
+                agePlaceholder: 'उमेर',
+                gender: 'लिङ्ग *',
+                genderSelect: 'छान्नुहोस्',
+                male: 'पुरुष',
+                female: 'महिला',
+                other: 'अन्य',
+                education: 'शिक्षा स्तर *',
+                educationSelect: 'शिक्षा स्तर छान्नुहोस्',
+                school: 'विद्यालय (कक्षा १-१०)',
+                higherSecondary: 'उच्च माध्यमिक (+२/१२)',
+                bachelors: 'स्नातक तह',
+                masters: 'स्नातकोत्तर तह',
+                phd: 'पीएचडी/विद्यावारिधि',
+                occupation: 'हालको पेशा',
+                occupationPlaceholder: 'विद्यार्थी, कर्मचारी, आदि',
+                location: 'स्थान',
+                locationPlaceholder: 'शहर, जिल्ला',
+                proceedBtn: 'मूल्यांकनमा जानुहोस् →',
+                startTitle: 'आफ्नो उपयुक्त क्यारियर बाटो पत्ता लगाउनुहोस्',
+                startDescription: 'तपाईंको व्यक्तित्व र रुचि अनुसारको क्यारियर पत्ता लगाउन ४२ प्रश्नहरूको जवाफ दिनुहोस्। यो विश्वभरका क्यारियर परामर्शदाताहरूले प्रयोग गर्ने होल्याण्ड कोड (RIASEC) मोडेलमा आधारित छ।',
+                startBtn: 'मूल्यांकन सुरु गर्नुहोस्',
+                instruction: '📋 प्रत्येक कथन पढ्नुहोस्। यदि तपाईं सहमत हुनुहुन्छ भने, "हो" छान्नुहोस्। कुनै गलत जवाफ छैन!',
+                questionLabel: 'प्रश्न',
+                yes: 'हो',
+                yesDesc: 'यो मलाई वर्णन गर्छ',
+                no: 'होइन',
+                noDesc: 'यो मलाई वर्णन गर्दैन',
+                back: '← पछाडि',
+                next: 'अगाडि बढ्नुहोस्',
+                viewResults: 'नतिजा हेर्नुहोस्',
+                yourResult: 'तपाईंको नतिजा',
+                yourCode: 'तपाईंको रुचि कोड हो:',
+                scoreDetails: 'स्कोर विवरण',
+                suggestedCareers: 'सुझाव गरिएका क्यारियरहरू',
+                downloadReport: '📄 प्रतिवेदन डाउनलोड गर्नुहोस् (PDF)',
+                retakeTest: 'पुन: मूल्याङ्कन गर्नुहोस्',
+                categories: {
+                    R: 'R · यथार्थवादी',
+                    I: 'I · अन्वेषणात्मक',
+                    A: 'A · कलात्मक',
+                    S: 'S · सामाजिक',
+                    E: 'E · उद्यमशील',
+                    C: 'C · परम्परागत'
+                }
+            }
+        };
+
+        // Type descriptions in both languages
+        const typeInfoBilingual = {
+            en: {
+                R: {
+                    name: "Realistic",
+                    subtitle: "The Doer",
+                    description: "You excel at practical work and enjoy building, repairing, or working with tools and machines. You're practical, action-oriented and prefer tangible results over abstract theories.",
+                    careers: ["Engineering", "Construction", "Agriculture", "Mechanic", "Chef", "Healthcare Assistant", "Computer Tech"]
+                },
+                I: {
+                    name: "Investigative",
+                    subtitle: "The Thinker",
+                    description: "You enjoy analyzing problems and conducting research. Intellectual challenges energize you, and you excel at working with ideas, data, and complex concepts.",
+                    careers: ["Scientist", "Doctor", "Psychologist", "Software Developer", "Data Analyst", "Marine Biologist", "Researcher"]
+                },
+                A: {
+                    name: "Artistic",
+                    subtitle: "The Creator",
+                    description: "You thrive in unstructured environments where creativity flows freely. Self-expression is important to you, and you bring originality and innovation to everything you do.",
+                    careers: ["Graphic Designer", "Writer", "Musician", "Photographer", "Architect", "Actor", "Interior Designer"]
+                },
+                S: {
+                    name: "Social",
+                    subtitle: "The Helper",
+                    description: "You enjoy working with people and making a positive impact in their lives. Empathy comes naturally to you, and you excel at understanding and meeting others' needs.",
+                    careers: ["Teacher", "Nurse", "Counselor", "Social Worker", "Physical Therapist", "HR Manager", "Public Relations"]
+                },
+                E: {
+                    name: "Enterprising",
+                    subtitle: "The Persuader",
+                    description: "You're ambitious, competitive, and enjoy taking the lead. Leadership energizes you, and you thrive in dynamic environments where you can influence and motivate others.",
+                    careers: ["Entrepreneur", "Marketing Manager", "Lawyer", "Sales Director", "Political Scientist", "Real Estate Agent", "Financial Advisor"]
+                },
+                C: {
+                    name: "Conventional",
+                    subtitle: "The Organizer",
+                    description: "You excel at creating order and working with data. Detail-oriented and reliable, you thrive in structured environments with clear expectations and procedures.",
+                    careers: ["Accountant", "Administrator", "Data Processor", "Bank Teller", "Medical Records", "Insurance Agent", "Court Reporter"]
+                }
+            },
+            ne: {
+                R: {
+                    name: "यथार्थवादी (Realistic)",
+                    subtitle: "कार्यकर्ता",
+                    description: "तपाईं व्यावहारिक काममा उत्कृष्ट हुनुहुन्छ र निर्माण गर्न, मर्मत गर्न, वा औजार र मेसिनसँग काम गर्न रमाउनुहुन्छ। तपाईं व्यावहारिक, कार्य-उन्मुख हुनुहुन्छ र अमूर्त सिद्धान्तहरू भन्दा ठोस नतिजाहरू मन पराउनुहुन्छ।",
+                    careers: ["इन्जिनियरिङ", "निर्माण", "कृषि", "मेकानिक", "खानापकाउने", "स्वास्थ्य सहायक", "कम्प्युटर टेक"]
+                },
+                I: {
+                    name: "अन्वेषणात्मक (Investigative)",
+                    subtitle: "विचारक",
+                    description: "तपाईंलाई समस्याहरू विश्लेषण गर्न र अनुसन्धान गर्न मन पर्छ। बौद्धिक चुनौतीहरूले तपाईंलाई ऊर्जा दिन्छ, र तपाईं विचार, डेटा र जटिल अवधारणाहरूसँग काम गर्नमा उत्कृष्ट हुनुहुन्छ।",
+                    careers: ["वैज्ञानिक", "चिकित्सक", "मनोवैज्ञानिक", "सफ्टवेयर विकासकर्ता", "डेटा विश्लेषक", "समुद्री जीवविज्ञानी", "अनुसन्धानकर्ता"]
+                },
+                A: {
+                    name: "कलात्मक (Artistic)",
+                    subtitle: "सिर्जनाकर्ता",
+                    description: "तपाईं असंरचित वातावरणमा फस्टाउनुहुन्छ जहाँ सिर्जनशीलता स्वतन्त्र रूपमा बग्छ। आत्म-अभिव्यक्ति तपाईंको लागि महत्त्वपूर्ण छ, र तपाईंले गर्ने सबै कुरामा मौलिकता र नवीनता ल्याउनुहुन्छ।",
+                    careers: ["ग्राफिक डिजाइनर", "लेखक", "संगीतकार", "फोटोग्राफर", "वास्तुकार", "अभिनेता", "इन्टेरियर डिजाइनर"]
+                },
+                S: {
+                    name: "सामाजिक (Social)",
+                    subtitle: "सहायक",
+                    description: "तपाईं मानिसहरूसँग काम गर्न र उनीहरूको जीवनमा सकारात्मक प्रभाव पार्न इच्छुक हुनुहुन्छ। समानुभूति स्वाभाविक रूपमा आउँछ, र तपाईं अरूको आवश्यकता बुझ्न र पूरा गर्नमा उत्कृष्ट हुनुहुन्छ।",
+                    careers: ["शिक्षक", "नर्स", "परामर्शदाता", "समाज सेवक", "भौतिक चिकित्सक", "मानव संसाधन प्रबन्धक", "जनसम्पर्क"]
+                },
+                E: {
+                    name: "उद्यमशील (Enterprising)",
+                    subtitle: "प्रभावकारी",
+                    description: "तपाईं महत्वाकांक्षी, प्रतिस्पर्धी हुनुहुन्छ र नेतृत्व लिन मन पराउनुहुन्छ। नेतृत्वले तपाईंलाई ऊर्जा दिन्छ, र तपाईं गतिशील वातावरणमा फस्टाउनुहुन्छ जहाँ तपाईं अरूलाई प्रभाव पार्न र प्रेरित गर्न सक्नुहुन्छ।",
+                    careers: ["उद्यमी", "मार्केटिङ प्रबन्धक", "वकिल", "बिक्री निर्देशक", "राजनीतिक वैज्ञानिक", "रियल इस्टेट एजेन्ट", "वित्तीय सल्लाहकार"]
+                },
+                C: {
+                    name: "परम्परागत (Conventional)",
+                    subtitle: "संगठनकर्ता",
+                    description: "तपाईं व्यवस्था सिर्जना गर्न र डेटासँग काम गर्नमा उत्कृष्ट हुनुहुन्छ। विस्तृत-उन्मुख र भरपर्दो, तपाईं स्पष्ट अपेक्षा र प्रक्रियाहरू भएको संरचित वातावरणमा फस्टाउनुहुन्छ।",
+                    careers: ["लेखापाल", "प्रशासक", "डेटा प्रोसेसर", "बैंक टेलर", "चिकित्सा रेकर्ड", "बीमा एजेन्ट", "अदालत रिपोर्टर"]
+                }
+            }
+        };
+
+        // Function to get current typeInfo based on language
+        function getTypeInfo() {
+            return typeInfoBilingual[currentLang];
+        }
+
+        // Language selection function
+        function selectLanguage(lang) {
+            currentLang = lang;
+            document.querySelectorAll('.language-btn').forEach(btn => btn.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+            
+            // Show main content after short delay
+            setTimeout(() => {
+                document.getElementById('languageScreen').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
+                applyTranslations();
+            }, 300);
+        }
+
+        // Apply translations to the UI
+        function applyTranslations() {
+            const t = translations[currentLang];
+            
+            // Header
+            document.getElementById('headerTitle').textContent = t.headerTitle;
+            document.getElementById('headerSubtitle').textContent = t.headerSubtitle;
+            
+            // User form
+            document.querySelector('#userFormScreen h2').textContent = t.formWelcome;
+            document.querySelector('#userFormScreen .description').textContent = t.formDescription;
+            
+            // Form labels and placeholders
+            document.querySelector('label[for="fullName"]').textContent = t.fullName;
+            document.getElementById('fullName').placeholder = t.fullNamePlaceholder;
+            document.querySelector('label[for="email"]').textContent = t.email;
+            document.getElementById('email').placeholder = t.emailPlaceholder;
+            document.querySelector('label[for="phone"]').textContent = t.phone;
+            document.getElementById('phone').placeholder = t.phonePlaceholder;
+            document.querySelector('label[for="age"]').textContent = t.age;
+            document.getElementById('age').placeholder = t.agePlaceholder;
+            document.querySelector('label[for="gender"]').textContent = t.gender;
+            document.querySelector('label[for="education"]').textContent = t.education;
+            document.querySelector('label[for="occupation"]').textContent = t.occupation;
+            document.getElementById('occupation').placeholder = t.occupationPlaceholder;
+            document.querySelector('label[for="location"]').textContent = t.location;
+            document.getElementById('location').placeholder = t.locationPlaceholder;
+            
+            // Gender options
+            const genderSelect = document.getElementById('gender');
+            genderSelect.options[0].text = t.genderSelect;
+            genderSelect.options[1].text = t.male;
+            genderSelect.options[2].text = t.female;
+            genderSelect.options[3].text = t.other;
+            
+            // Education options
+            const eduSelect = document.getElementById('education');
+            eduSelect.options[0].text = t.educationSelect;
+            eduSelect.options[1].text = t.school;
+            eduSelect.options[2].text = t.higherSecondary;
+            eduSelect.options[3].text = t.bachelors;
+            eduSelect.options[4].text = t.masters;
+            eduSelect.options[5].text = t.phd;
+            eduSelect.options[6].text = t.other;
+            
+            // Form submit button
+            document.querySelector('#userForm .btn-primary').textContent = t.proceedBtn;
+            
+            // Start screen
+            document.querySelector('#startScreen h2').textContent = t.startTitle;
+            document.querySelector('#startScreen .description').textContent = t.startDescription;
+            document.querySelector('#startScreen .btn-primary').textContent = t.startBtn;
+            
+            // Categories
+            const categories = document.querySelectorAll('#startScreen .category');
+            const catKeys = ['R', 'I', 'A', 'S', 'E', 'C'];
+            categories.forEach((cat, i) => {
+                cat.textContent = t.categories[catKeys[i]];
+            });
+            
+            // Question screen
+            document.querySelector('.instruction-box p').textContent = t.instruction;
+            document.querySelector('#agreeBtn .choice-label').textContent = t.yes;
+            document.querySelector('#agreeBtn .choice-sub').textContent = t.yesDesc;
+            document.querySelector('#disagreeBtn .choice-label').textContent = t.no;
+            document.querySelector('#disagreeBtn .choice-sub').textContent = t.noDesc;
+            document.getElementById('backBtn').textContent = t.back;
+        }
+
         // Question data with RIASEC mapping and Nepali translations
         const questions = [
             { id: 1, text: "I like to work on cars", nepali: "मलाई गाडीमा काम गर्न मन पर्छ", type: "R" },
@@ -788,52 +1195,11 @@
             { id: 42, text: "I like to give speeches", nepali: "मलाई भाषण दिन मन पर्छ", type: "E" }
         ];
 
-        // Type descriptions
-        const typeInfo = {
-            R: {
-                name: "Realistic",
-                subtitle: "The Doer",
-                description: "You excel at hands-on work and enjoy building, fixing, or working with tools and machines. You're practical, action-oriented, and prefer tangible results over abstract theories.",
-                careers: ["Engineering", "Construction", "Agriculture", "Mechanic", "Chef", "Health Assistant", "Computer Tech"]
-            },
-            I: {
-                name: "Investigative",
-                subtitle: "The Thinker",
-                description: "You love analyzing problems and conducting research. Intellectual challenges energize you, and you excel at working with ideas, data, and complex concepts.",
-                careers: ["Scientist", "Doctor", "Psychologist", "Software Developer", "Data Analyst", "Marine Biologist", "Researcher"]
-            },
-            A: {
-                name: "Artistic",
-                subtitle: "The Creator",
-                description: "You thrive in unstructured environments where creativity flows freely. Self-expression is important to you, and you bring originality and innovation to everything you do.",
-                careers: ["Graphic Designer", "Writer", "Musician", "Photographer", "Architect", "Actor", "Interior Designer"]
-            },
-            S: {
-                name: "Social",
-                subtitle: "The Helper",
-                description: "You're drawn to working with people and making a positive impact on their lives. Empathy comes naturally, and you excel at understanding and meeting others' needs.",
-                careers: ["Teacher", "Nurse", "Counselor", "Social Worker", "Physical Therapist", "HR Manager", "Public Relations"]
-            },
-            E: {
-                name: "Enterprising",
-                subtitle: "The Persuader",
-                description: "You're ambitious, competitive, and love taking charge. Leadership energizes you, and you thrive in dynamic environments where you can influence and inspire others.",
-                careers: ["Entrepreneur", "Marketing Manager", "Lawyer", "Sales Director", "Political Scientist", "Real Estate Agent", "Financial Advisor"]
-            },
-            C: {
-                name: "Conventional",
-                subtitle: "The Organizer",
-                description: "You excel at creating order and working with data. Detail-oriented and reliable, you thrive in structured environments with clear expectations and procedures.",
-                careers: ["Accountant", "Administrator", "Data Processor", "Bank Teller", "Medical Records", "Insurance Agent", "Court Reporter"]
-            }
-        };
-
         // State
         let currentQuestion = 0;
         let answers = {};
         let currentSelection = null;
-        let timerInterval = null;
-        let timeRemaining = 300;
+        let startTime = null; // Track when quiz started for time calculation
         let userData = {};
         let userSessionId = null;
 
@@ -871,65 +1237,47 @@
             }
             
             // Hide form, show quiz intro
-            document.getElementById('userFormScreen').style.display = 'none';
-            document.getElementById('startScreen').style.display = 'block';
+            document.getElementById('userFormScreen').classList.add('hidden');
+            document.getElementById('startScreen').classList.add('active');
         }
 
-        function formatTime(seconds) {
-            const mins = Math.floor(seconds / 60);
-            const secs = seconds % 60;
-            return `${mins}:${secs.toString().padStart(2, '0')}`;
-        }
-
-        function updateTimerDisplay() {
-            const timerDisplay = document.getElementById('timerDisplay');
-            const timerText = document.getElementById('timerText');
-            timerText.textContent = formatTime(timeRemaining);
-            
-            timerDisplay.classList.remove('warning', 'danger');
-            if (timeRemaining <= 60) {
-                timerDisplay.classList.add('danger');
-            } else if (timeRemaining <= 120) {
-                timerDisplay.classList.add('warning');
-            }
-        }
-
-        function startTimer() {
-            timerInterval = setInterval(() => {
-                timeRemaining--;
-                updateTimerDisplay();
-                
-                if (timeRemaining <= 0) {
-                    clearInterval(timerInterval);
-                    showResults();
-                }
-            }, 1000);
-        }
-
-        function stopTimer() {
-            if (timerInterval) {
-                clearInterval(timerInterval);
-                timerInterval = null;
-            }
+        // Calculate time taken in seconds
+        function getTimeTaken() {
+            if (!startTime) return 0;
+            return Math.floor((Date.now() - startTime) / 1000);
         }
 
         function startQuiz() {
-            document.getElementById('startScreen').style.display = 'none';
+            // Hide start screen completely
+            const startScreen = document.getElementById('startScreen');
+            startScreen.classList.remove('active');
+            startScreen.style.display = 'none';
+            
+            // Show question screen
             document.getElementById('questionScreen').classList.add('active');
             document.getElementById('progressSection').classList.add('active');
-            timeRemaining = 300;
-            updateTimerDisplay();
-            startTimer();
+            startTime = Date.now(); // Record start time
             renderQuestion();
         }
 
         function renderQuestion() {
             const question = questions[currentQuestion];
+            const t = translations[currentLang];
             
-            document.getElementById('questionLabel').textContent = `Question ${currentQuestion + 1}`;
-            document.getElementById('questionText').textContent = question.text;
-            document.getElementById('questionTextNepali').textContent = question.nepali;
-            document.getElementById('currentQ').textContent = currentQuestion + 1;
+            // Convert to Nepali numerals for Nepali language
+            const nepaliNumerals = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
+            const toNepaliNumber = (num) => String(num).split('').map(d => nepaliNumerals[d]).join('');
+            
+            // Display question number in appropriate language
+            const questionNum = currentLang === 'ne' ? toNepaliNumber(currentQuestion + 1) : (currentQuestion + 1);
+            const totalNum = currentLang === 'ne' ? '४२' : '42';
+            
+            document.getElementById('questionLabel').textContent = `${t.questionLabel} ${questionNum}`;
+            document.getElementById('questionText').textContent = currentLang === 'ne' ? question.nepali : question.text;
+            document.getElementById('currentQ').textContent = questionNum;
+            
+            // Update progress text
+            document.querySelector('.progress-text').innerHTML = `${t.questionLabel} <strong id="currentQ">${questionNum}</strong> / ${totalNum}`;
             
             // Update progress
             const progress = ((currentQuestion + 1) / questions.length) * 100;
@@ -945,7 +1293,7 @@
             // Update buttons
             document.getElementById('backBtn').style.visibility = currentQuestion === 0 ? 'hidden' : 'visible';
             document.getElementById('nextBtn').disabled = currentSelection === null;
-            document.getElementById('nextBtn').textContent = currentQuestion === questions.length - 1 ? 'See Results' : 'Continue';
+            document.getElementById('nextBtn').textContent = currentQuestion === questions.length - 1 ? t.viewResults : t.next;
         }
 
         function selectChoice(agree) {
@@ -1004,7 +1352,6 @@
         }
 
         function showResults() {
-            stopTimer();
             document.getElementById('questionScreen').classList.remove('active');
             document.getElementById('progressSection').classList.remove('active');
             document.getElementById('resultsScreen').classList.add('active');
@@ -1012,6 +1359,8 @@
             const scores = calculateScores();
             const sortedTypes = Object.entries(scores).sort((a, b) => b[1] - a[1]);
             const topThree = sortedTypes.slice(0, 3).map(([type]) => type);
+            const t = translations[currentLang];
+            const typeInfo = getTypeInfo();
             
             // Save to database
             saveToDatabase(scores, topThree);
@@ -1049,7 +1398,7 @@
                             </div>
                         </div>
                         <p class="type-desc">${info.description}</p>
-                        <div class="careers-label">Suggested Careers</div>
+                        <div class="careers-label">${t.suggestedCareers}</div>
                         <div class="careers-list">
                             ${info.careers.map(c => `<span class="career-tag">${c}</span>`).join('')}
                         </div>
@@ -1059,15 +1408,15 @@
 
             document.getElementById('resultsScreen').innerHTML = `
                 <div class="card results-header">
-                    <h2>Your Results</h2>
-                    <p>Your interest code is:</p>
+                    <h2>${t.yourResult}</h2>
+                    <p>${t.yourCode}</p>
                     <div class="code-display">
                         ${topThree.map(t => `<div class="code-letter">${t}</div>`).join('')}
                     </div>
                 </div>
 
                 <div class="card scores-card">
-                    <h3>Score Breakdown</h3>
+                    <h3>${t.scoreDetails}</h3>
                     ${scoreRowsHTML}
                 </div>
 
@@ -1075,14 +1424,23 @@
                     ${typeCardsHTML}
                 </div>
 
-                <button class="btn-primary" onclick="downloadPDF()" style="margin-bottom: 12px;">
-                    📄 Download Report (PDF)
+                <button class="btn-primary" id="downloadBtn" onclick="downloadPDF()" style="margin-bottom: 12px;">
+                    ${t.downloadReport}
                 </button>
-                <button class="btn-restart" onclick="restartQuiz()">Take Assessment Again</button>
+                <button class="btn-restart" onclick="restartQuiz()">${t.retakeTest}</button>
             `;
         }
 
         async function downloadPDF() {
+            const downloadBtn = document.getElementById('downloadBtn');
+            const originalText = downloadBtn.textContent;
+            const t = translations[currentLang];
+            
+            // Show loading state
+            downloadBtn.disabled = true;
+            downloadBtn.innerHTML = '<span class="loading-spinner"></span> ' + (currentLang === 'ne' ? 'प्रतिवेदन तयार हुँदैछ...' : 'Preparing your report...');
+            downloadBtn.style.opacity = '0.7';
+            
             const scores = calculateScores();
             const sortedTypes = Object.entries(scores).sort((a, b) => b[1] - a[1]);
             const topThree = sortedTypes.slice(0, 3).map(([type]) => type);
@@ -1121,11 +1479,16 @@
                     printWindow.document.write(html);
                     printWindow.document.close();
                 } else {
-                    alert('Failed to generate report. Please try again.');
+                    alert(currentLang === 'ne' ? 'प्रतिवेदन उत्पन्न गर्न असफल भयो। कृपया पुन: प्रयास गर्नुहोस्।' : 'Failed to generate report. Please try again.');
                 }
             } catch (error) {
                 console.error('Error generating report:', error);
-                alert('Failed to generate report. Please try again.');
+                alert(currentLang === 'ne' ? 'प्रतिवेदन उत्पन्न गर्न असफल भयो। कृपया पुन: प्रयास गर्नुहोस्।' : 'Failed to generate report. Please try again.');
+            } finally {
+                // Restore button state
+                downloadBtn.disabled = false;
+                downloadBtn.textContent = originalText;
+                downloadBtn.style.opacity = '1';
             }
         }
 
@@ -1145,7 +1508,7 @@
                 answers: answers,
                 scores: scores,
                 topThreeCode: topThree.join(''),
-                timeTaken: 300 - timeRemaining,
+                timeTaken: getTimeTaken(),
                 completedAt: new Date().toISOString()
             };
             
@@ -1170,12 +1533,15 @@
             currentQuestion = 0;
             answers = {};
             currentSelection = null;
-            stopTimer();
-            timeRemaining = 300;
+            startTime = null;
             
             document.getElementById('resultsScreen').classList.remove('active');
             document.getElementById('resultsScreen').innerHTML = '';
-            document.getElementById('startScreen').style.display = 'block';
+            
+            // Show start screen
+            const startScreen = document.getElementById('startScreen');
+            startScreen.classList.add('active');
+            startScreen.style.display = 'block';
         }
     </script>
 </body>
