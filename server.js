@@ -256,60 +256,108 @@ const companyBranding = {
     website: 'https://justconnect.online/',
     email: 'info@justconnect.online',
     phone: '+977-1-XXXXXXX',
-    logoUrl: '/logo.jpeg',
+    logoUrl: '/Document.svg',
     tagline: 'Empowering Your Career Journey',
     taglineNepali: 'तपाईंको क्यारियर यात्रामा सशक्तिकरण'
 };
 
-// Extended RIASEC descriptions for professional report
+// Extended RIASEC descriptions for professional report - Based on RIASEC Detailed PDF and RIASEC Occupations
 const riasecExtended = {
     R: {
         name: 'Realistic', nepali: 'यथार्थवादी', icon: '🔧', color: '#dc2626', colorLight: '#fef2f2',
-        subtitle: 'The Doer', subtitleNepali: 'कार्यकर्ता',
-        description: 'Realistic individuals prefer working with things rather than ideas or people. They enjoy hands-on activities, building, repairing, and working outdoors.',
-        descriptionNepali: 'यथार्थवादी व्यक्तिहरूले विचार वा मानिसहरू भन्दा चीजहरूसँग काम गर्न रुचाउँछन्।',
-        strengths: ['Practical problem-solving', 'Physical coordination', 'Working with tools', 'Building & repairing'],
-        careers: ['Civil Engineer', 'Mechanic', 'Electrician', 'Carpenter', 'Pilot', 'Architect', 'Chef', 'Farmer']
+        subtitle: 'The Doers', subtitleNepali: 'कार्यकर्ता',
+        focus: 'Things & Order',
+        description: 'People who have athletic or mechanical ability, prefer to work with objects, machines, tools, plants or animals, or to be outdoors. Technically & Athletically Inclined people have mechanical ingenuity and prefer to work on their own using their hands and tools to build, repair, grow, or make things, often outdoors.',
+        descriptionNepali: 'यथार्थवादी व्यक्तिहरूले विचार वा मानिसहरू भन्दा चीजहरूसँग काम गर्न रुचाउँछन्। तिनीहरूले हातले काम गर्न, निर्माण गर्न, मर्मत गर्न र बाहिर काम गर्न मन पराउँछन्।',
+        traits: ['Practical', 'Athletic', 'Straightforward/Frank', 'Mechanically inclined', 'Nature lover', 'Thrifty', 'Curious about the physical world', 'Stable', 'Concrete', 'Reserved', 'Self-controlled', 'Independent', 'Ambitious', 'Systematic', 'Persistent'],
+        abilities: ['Fix electrical things', 'Solve electrical problems', 'Pitch a tent', 'Play a sport', 'Read a blueprint', 'Plant a garden', 'Operate tools and machinery'],
+        likes: ['Tinker with machines/vehicles', 'Work outdoors', 'Use your hands', 'Be physically active', 'Build things', 'Tend/train animals', 'Work on electronic equipment'],
+        hobbies: ['Refinishing furniture', 'Growing plants/flowers', 'Playing sports, hunting, fishing', 'Woodworking', 'Coaching team sports', 'Building models', 'Repairing cars, equipment', 'Target shooting', 'Landscaping', 'Taking exercise classes'],
+        strengths: ['Practical problem-solving', 'Physical coordination', 'Working with tools', 'Building & repairing', 'Mechanical ingenuity', 'Athletic ability'],
+        collegeMajors: ['Agriculture', 'Health Assistant', 'Computers', 'Construction', 'Mechanic/Machinist', 'Engineering', 'Food and Hospitality'],
+        relatedPathways: ['Natural Resources', 'Health Services', 'Industrial and Engineering Technology', 'Arts and Communication'],
+        careers: ['Aerospace Engineer', 'Aircraft Mechanic', 'Automotive Mechanic', 'Baker/Chef', 'Carpenter', 'Civil Engineer', 'Construction Worker', 'Dental Laboratory Technician', 'Diesel Mechanic', 'Electrician', 'Electrical Engineer', 'Farmer', 'Firefighter', 'Forester', 'HVAC Technician', 'Industrial Machinery Mechanic', 'Jeweler', 'Laboratory Technician', 'Landscape Worker', 'Machinist', 'Mechanical Engineer', 'Pilot', 'Plumber', 'Police Officer', 'Practical Nurse', 'Quality Control Manager', 'Surveyor', 'Tool and Die Maker', 'Truck Driver', 'Welder', 'Veterinary Technician'],
+        occupationsExtended: ['Aerospace Engineering Technicians', 'Agricultural Equipment Operators', 'Agricultural Technicians', 'Aircraft Mechanics and Service Technicians', 'Airline Pilots, Copilots, and Flight Engineers', 'Athletes and Sports Competitors', 'Automotive Body Repairers', 'Automotive Master Mechanics', 'Aviation Inspectors', 'Bakers', 'Brickmasons', 'Broadcast Technicians', 'Bus and Truck Mechanics', 'Cabinetmakers', 'Camera Operators', 'Cardiovascular Technologists', 'Cement Masons', 'Chemical Plant Operators', 'Civil Drafters', 'Civil Engineering Technicians', 'Civil Engineers', 'Commercial Pilots', 'Computer Support Specialists', 'Construction Laborers', 'Cooks (Restaurant/Chef)', 'Correctional Officers', 'Crane Operators', 'Dental Laboratory Technicians', 'Electrical Drafters', 'Electrical Engineering Technicians', 'Electrical Power-Line Installers', 'Electricians', 'Elevator Installers', 'Environmental Engineering Technicians', 'Farm Equipment Mechanics', 'Farmers and Ranchers', 'Fence Erectors', 'Firefighters', 'Fish and Game Wardens', 'Floor Layers', 'Food Science Technicians', 'Forest and Conservation Workers', 'Foresters', 'Glaziers', 'Hazardous Materials Removal Workers', 'Heating and Air Conditioning Mechanics', 'Highway Maintenance Workers', 'Industrial Machinery Mechanics', 'Jewelers', 'Landscaping Workers', 'Locksmiths', 'Locomotive Engineers', 'Logging Equipment Operators', 'Machinists', 'Maintenance Workers', 'Mechanical Drafters', 'Mechanical Engineering Technicians', 'Medical Equipment Preparers', 'Medical Equipment Repairers', 'Millwrights', 'Mobile Heavy Equipment Mechanics', 'Motorcycle Mechanics', 'Nuclear Power Reactor Operators', 'Painters', 'Pest Control Workers', 'Petroleum Pump Operators', 'Plumbers', 'Police Patrol Officers', 'Power Plant Operators', 'Printing Machine Operators', 'Radiologic Technicians', 'Railroad Engineers', 'Recreational Vehicle Technicians', 'Refrigeration Mechanics', 'Roofers', 'Security Guards', 'Sheet Metal Workers', 'Stationary Engineers', 'Structural Iron Workers', 'Surgical Technologists', 'Surveyors', 'Tailors', 'Taxi Drivers', 'Telecommunications Installers', 'Tool and Die Makers', 'Transportation Inspectors', 'Tree Trimmers', 'Truck Drivers', 'Upholsterers', 'Veterinary Technicians', 'Watch Repairers', 'Water Treatment Plant Operators', 'Welders', 'Woodworking Machine Operators']
     },
     I: {
         name: 'Investigative', nepali: 'अन्वेषणात्मक', icon: '🔬', color: '#2563eb', colorLight: '#eff6ff',
-        subtitle: 'The Thinker', subtitleNepali: 'विचारक',
-        description: 'Investigative individuals enjoy researching, analyzing, and solving complex problems. They are curious, analytical, and prefer working independently.',
-        descriptionNepali: 'अन्वेषणात्मक व्यक्तिहरूले अनुसन्धान गर्न, विश्लेषण गर्न र जटिल समस्याहरू समाधान गर्न रमाउँछन्।',
-        strengths: ['Critical thinking', 'Research skills', 'Data analysis', 'Scientific reasoning'],
-        careers: ['Scientist', 'Doctor', 'Researcher', 'Software Developer', 'Data Analyst', 'Professor', 'Pharmacist', 'Psychologist']
+        subtitle: 'The Thinkers', subtitleNepali: 'विचारक',
+        focus: 'Ideas and Things',
+        description: 'People who like to observe, learn, investigate, analyze, evaluate or solve problems. Abstract Problem Solvers prefer to work on their own, using their minds to observe, learn, investigate, research and solve abstract problems, frequently in a scientifically related area.',
+        descriptionNepali: 'अन्वेषणात्मक व्यक्तिहरूले अनुसन्धान गर्न, विश्लेषण गर्न र जटिल समस्याहरू समाधान गर्न रमाउँछन्। तिनीहरू जिज्ञासु, विश्लेषणात्मक र स्वतन्त्र रूपमा काम गर्न रुचाउँछन्।',
+        traits: ['Inquisitive', 'Analytical', 'Scientific', 'Observant', 'Precise', 'Scholarly', 'Cautious', 'Intellectually self-confident', 'Introspective', 'Reserved', 'Broad-minded', 'Independent', 'Logical', 'Complex', 'Curious'],
+        abilities: ['Think abstractly', 'Solve math problems', 'Understand scientific theories', 'Do complex calculations', 'Use a microscope or computer', 'Interpret formulas'],
+        likes: ['Explore a variety of ideas', 'Use computers', 'Work independently', 'Perform lab experiments', 'Read scientific or technical journals', 'Analyze data', 'Deal with abstractions', 'Do research', 'Be challenged'],
+        hobbies: ['Book club', 'Astronomy', 'Crossword puzzles/board games', 'Preservation of endangered species', 'Computers', 'Visiting museums', 'Collecting rocks, stamps, coins, etc.', 'Amateur Radio', 'Recreational flying'],
+        strengths: ['Critical thinking', 'Research skills', 'Data analysis', 'Scientific reasoning', 'Abstract problem-solving', 'Mathematical ability'],
+        collegeMajors: ['Marine Biology', 'Engineering', 'Chemistry', 'Zoology', 'Medicine/Surgery', 'Consumer Economics', 'Psychology'],
+        relatedPathways: ['Health Services', 'Business', 'Public and Human Services', 'Industrial and Engineering Technology'],
+        careers: ['Actuary', 'Agronomist', 'Anesthesiologist', 'Anthropologist', 'Archeologist', 'Biochemist', 'Biologist', 'Chemical Engineer', 'Chemist', 'Chiropractor', 'Civil Engineer', 'Computer Engineer', 'Computer Programmer', 'Computer Systems Analyst', 'Dentist', 'Ecologist', 'Economist', 'Electrical Engineer', 'Geologist', 'Mathematician', 'Medical Lab Technologist', 'Meteorologist', 'Nurse Practitioner', 'Pharmacist', 'Physician', 'Psychologist', 'Research Analyst', 'Software Engineer', 'Statistician', 'Technical Writer', 'Veterinarian', 'Web Developer'],
+        occupationsExtended: ['Aerospace Engineers', 'Agricultural Engineers', 'Anesthesiologists', 'Animal Scientists', 'Anthropologists', 'Archeologists', 'Astronomers', 'Atmospheric Scientists', 'Audiologists', 'Biochemists and Biophysicists', 'Biologists', 'Biomedical Engineers', 'Chemical Engineers', 'Chemical Technicians', 'Chemists', 'Clinical Psychologists', 'Computer and Information Scientists', 'Computer Hardware Engineers', 'Computer Programmers', 'Computer Software Engineers', 'Computer Systems Analysts', 'Coroners', 'Dentists', 'Diagnostic Medical Sonographers', 'Dietitians and Nutritionists', 'Economists', 'Electrical Engineers', 'Electronics Engineers', 'Environmental Engineers', 'Environmental Scientists', 'Epidemiologists', 'Family and General Practitioners', 'Fire Investigators', 'Food Scientists', 'Forensic Science Technicians', 'Geographers', 'Geoscientists', 'Historians', 'Hydrologists', 'Industrial Engineers', 'Industrial-Organizational Psychologists', 'Internists', 'Management Analysts', 'Marine Architects', 'Marine Engineers', 'Market Research Analysts', 'Materials Engineers', 'Materials Scientists', 'Mathematicians', 'Mechanical Engineers', 'Medical and Clinical Laboratory Technologists', 'Medical Scientists', 'Microbiologists', 'Mining Engineers', 'Network Systems Administrators', 'Nuclear Engineers', 'Nuclear Medicine Technologists', 'Obstetricians and Gynecologists', 'Operations Research Analysts', 'Optometrists', 'Orthodontists', 'Pediatricians', 'Petroleum Engineers', 'Pharmacists', 'Physicists', 'Podiatrists', 'Political Scientists', 'Prosthodontists', 'Psychiatrists', 'School Psychologists', 'Sociologists', 'Software Quality Assurance Engineers', 'Soil Scientists', 'Surgeons', 'Survey Researchers', 'Urban and Regional Planners', 'Veterinarians', 'Zoologists and Wildlife Biologists']
     },
     A: {
         name: 'Artistic', nepali: 'कलात्मक', icon: '🎨', color: '#7c3aed', colorLight: '#f5f3ff',
-        subtitle: 'The Creator', subtitleNepali: 'सिर्जनाकर्ता',
-        description: 'Artistic individuals value self-expression and creativity. They prefer unstructured environments where they can be innovative and original.',
-        descriptionNepali: 'कलात्मक व्यक्तिहरूले आत्म-अभिव्यक्ति र सिर्जनशीलतालाई महत्व दिन्छन्।',
-        strengths: ['Creativity', 'Imagination', 'Artistic expression', 'Original thinking'],
-        careers: ['Graphic Designer', 'Writer', 'Musician', 'Actor', 'Photographer', 'Interior Designer', 'Fashion Designer', 'Animator']
+        subtitle: 'The Creators', subtitleNepali: 'सिर्जनाकर्ता',
+        focus: 'Ideas & Feelings',
+        description: 'People who have artistic, innovating or intuitional abilities and like to work in unstructured situations using their imagination and creativity. Idea Creators enjoy working with little supervision, innovating, problem-solving imaginatively, enjoy artistic expression, and creating, most often in the performing, visual and literary arts.',
+        descriptionNepali: 'कलात्मक व्यक्तिहरूले आत्म-अभिव्यक्ति र सिर्जनशीलतालाई महत्व दिन्छन्। तिनीहरूले असंरचित वातावरणमा काम गर्न रुचाउँछन् जहाँ तिनीहरू नवीन र मौलिक हुन सक्छन्।',
+        traits: ['Creative', 'Intuitive', 'Imaginative', 'Innovative', 'Unconventional', 'Emotional', 'Independent', 'Expressive', 'Original', 'Introspective', 'Impulsive', 'Sensitive', 'Courageous', 'Open', 'Complicated', 'Idealistic', 'Nonconforming'],
+        abilities: ['Sketch, draw, paint', 'Play a musical instrument', 'Write stories, poetry, music', 'Sing, act, dance', 'Design fashions or interiors'],
+        likes: ['Attend concerts, theatres, art exhibits', 'Read fiction, plays, and poetry', 'Work on crafts', 'Take photographs', 'Express yourself creatively', 'Deal with ambiguous ideas'],
+        hobbies: ['Photography', 'Performing', 'Writing stories, poems', 'Desktop publishing', 'Sewing', 'Taking dance lessons', 'Visiting art museums', 'Designing sets for plays', 'Travel', 'Playing a musical instrument', 'Homemade crafts', 'Painting', 'Speaking foreign languages'],
+        strengths: ['Creativity', 'Imagination', 'Artistic expression', 'Original thinking', 'Innovation', 'Visual/aesthetic sense'],
+        collegeMajors: ['Communications', 'Cosmetology', 'Fine and Performing Arts', 'Photography', 'Radio and TV', 'Interior Design', 'Architecture'],
+        relatedPathways: ['Public and Human Services', 'Arts and Communication'],
+        careers: ['Actor/Actress', 'Advertising Art Director', 'Advertising Manager', 'Architect', 'Clothing/Fashion Designer', 'Copywriter', 'Dancer', 'Choreographer', 'Drama Teacher', 'English Teacher', 'Fashion Illustrator', 'Furniture Designer', 'Graphic Designer', 'Interior Designer', 'Journalist/Reporter', 'Landscape Architect', 'Medical Illustrator', 'Museum Curator', 'Music Teacher', 'Photographer', 'Writer/Editor'],
+        occupationsExtended: ['Actors', 'Architects', 'Architectural Drafters', 'Art Directors', 'Broadcast News Analysts', 'Choreographers', 'Commercial and Industrial Designers', 'Craft Artists', 'Dancers', 'Desktop Publishers', 'Editors', 'Fashion Designers', 'Film and Video Editors', 'Fine Artists (Painters, Sculptors, Illustrators)', 'Floral Designers', 'Graphic Designers', 'Hairdressers and Cosmetologists', 'Interior Designers', 'Interpreters and Translators', 'Landscape Architects', 'Makeup Artists', 'Merchandise Displayers', 'Models', 'Multi-Media Artists and Animators', 'Music Composers and Arrangers', 'Music Directors', 'Musicians', 'Photographers', 'Poets and Creative Writers', 'Radio and Television Announcers', 'Reporters and Correspondents', 'Set and Exhibit Designers', 'Singers', 'Technical Writers']
     },
     S: {
         name: 'Social', nepali: 'सामाजिक', icon: '🤝', color: '#059669', colorLight: '#ecfdf5',
-        subtitle: 'The Helper', subtitleNepali: 'सहायक',
-        description: 'Social individuals enjoy working with people, helping, teaching, and counseling. They have strong interpersonal skills.',
-        descriptionNepali: 'सामाजिक व्यक्तिहरूले मानिसहरूसँग काम गर्न, मद्दत गर्न, सिकाउन र परामर्श दिन रमाउँछन्।',
-        strengths: ['Empathy', 'Communication', 'Teaching ability', 'Conflict resolution'],
-        careers: ['Teacher', 'Nurse', 'Counselor', 'Social Worker', 'HR Manager', 'Therapist', 'Coach', 'Public Relations']
+        subtitle: 'The Helpers', subtitleNepali: 'सहायक',
+        focus: 'People & Feelings',
+        description: 'People who like to work with people to enlighten, inform, help, train, or cure them, or are skilled with words. People Helpers like to work with people to inform, enlighten, help, train, develop or cure them.',
+        descriptionNepali: 'सामाजिक व्यक्तिहरूले मानिसहरूसँग काम गर्न, मद्दत गर्न, सिकाउन र परामर्श दिन रमाउँछन्। तिनीहरूसँग बलियो अन्तरव्यक्तिगत सीपहरू छन्।',
+        traits: ['Friendly', 'Helpful', 'Idealistic', 'Insightful', 'Outgoing', 'Understanding', 'Cooperative', 'Generous', 'Responsible', 'Forgiving', 'Patient', 'Empathic', 'Kind', 'Persuasive'],
+        abilities: ['Teach/train others', 'Express yourself clearly', 'Lead a group discussion', 'Mediate disputes', 'Plan and supervise an activity', 'Cooperate well with others'],
+        likes: ['Work in groups', 'Help people with problems', 'Participate in meetings', 'Do volunteer work', 'Work with young people', 'Play team sports', 'Serve others'],
+        hobbies: ['Volunteering with social action groups', 'Writing letters', 'Joining campus or community organizations', 'Helping others with personal concerns', 'Meeting new friends', 'Attending sporting events', 'Caring for children', 'Religious activities', 'Going to parties', 'Playing team sports'],
+        strengths: ['Empathy', 'Communication', 'Teaching ability', 'Conflict resolution', 'Interpersonal skills', 'Patience'],
+        collegeMajors: ['Counseling', 'Nursing', 'Physical Therapy', 'Travel', 'Advertising', 'Public Relations', 'Education'],
+        relatedPathways: ['Health Services', 'Public and Human Services'],
+        careers: ['Air Traffic Controller', 'Athletic Trainer', 'Chaplain', 'City Manager', 'College Professor', 'Community Planner', 'Counseling Psychologist', 'Counselor/Therapist', 'Cosmetologist', 'Dental Hygienist', 'Dietitian', 'Elementary School Teacher', 'High School Teacher', 'Historian', 'Home Economist', 'Hospital Administrator', 'Librarian', 'Medical Assistant', 'Minister/Priest/Rabbi', 'Nurse/Midwife', 'Occupational Therapist', 'Paralegal', 'Park Naturalist', 'Personnel Recruiter', 'Physical Therapist', 'Police Officer', 'Preschool Worker', 'Probation Officer', 'Social Worker'],
+        occupationsExtended: ['Adult Literacy Teachers', 'Agricultural Sciences Teachers', 'Anthropology Teachers', 'Arbitrators and Mediators', 'Architecture Teachers', 'Art, Drama, and Music Teachers', 'Athletic Trainers', 'Biological Science Teachers', 'Business Teachers', 'Chemistry Teachers', 'Child Care Workers', 'Child and Family Social Workers', 'Chiropractors', 'Clergy', 'Coaches and Scouts', 'Communications Teachers', 'Computer Science Teachers', 'Concierges', 'Counseling Psychologists', 'Criminal Justice Teachers', 'Dental Hygienists', 'Dietetic Technicians', 'Economics Teachers', 'Education Administrators', 'Educational Counselors', 'Elementary School Teachers', 'Emergency Management Specialists', 'Emergency Medical Technicians', 'English Language Teachers', 'Environmental Science Teachers', 'Farm and Home Management Advisors', 'Fitness Trainers', 'Foreign Language Teachers', 'Forestry Teachers', 'Funeral Attendants', 'Geography Teachers', 'Graduate Teaching Assistants', 'Health Educators', 'Health Specialties Teachers', 'History Teachers', 'Home Economics Teachers', 'Home Health Aides', 'Instructional Coordinators', 'Kindergarten Teachers', 'Law Teachers', 'Library Science Teachers', 'Licensed Practical Nurses', 'Marriage and Family Therapists', 'Massage Therapists', 'Mathematical Science Teachers', 'Medical and Public Health Social Workers', 'Medical Assistants', 'Mental Health Counselors', 'Middle School Teachers', 'Nannies', 'Nursing Aides', 'Nursing Teachers', 'Occupational Therapists', 'Park Naturalists', 'Personal Care Aides', 'Philosophy Teachers', 'Physical Therapists', 'Physical Therapist Assistants', 'Physician Assistants', 'Physics Teachers', 'Political Science Teachers', 'Preschool Teachers', 'Probation Officers', 'Psychiatric Technicians', 'Psychology Teachers', 'Public Address Announcers', 'Radiation Therapists', 'Recreation Workers', 'Recreational Therapists', 'Registered Nurses', 'Rehabilitation Counselors', 'Residential Advisors', 'Respiratory Therapists', 'Secondary School Teachers', 'Self-Enrichment Teachers', 'Social Work Teachers', 'Sociology Teachers', 'Special Education Teachers', 'Speech-Language Pathologists', 'Substance Abuse Counselors', 'Teacher Assistants', 'Tour Guides', 'Training Specialists', 'Vocational Education Teachers', 'Waiters and Waitresses']
     },
     E: {
         name: 'Enterprising', nepali: 'उद्यमशील', icon: '💼', color: '#d97706', colorLight: '#fffbeb',
-        subtitle: 'The Persuader', subtitleNepali: 'प्रभावकारी',
-        description: 'Enterprising individuals are natural leaders who enjoy persuading, managing, and motivating others. They are ambitious and competitive.',
-        descriptionNepali: 'उद्यमशील व्यक्तिहरू प्राकृतिक नेता हुन् जसले मनाउन, व्यवस्थापन गर्न र अरूलाई प्रेरित गर्न रमाउँछन्।',
-        strengths: ['Leadership', 'Persuasion', 'Risk-taking', 'Decision making'],
-        careers: ['Entrepreneur', 'Manager', 'Lawyer', 'Sales Director', 'Real Estate Agent', 'Marketing Manager', 'Politician', 'CEO']
+        subtitle: 'The Persuaders', subtitleNepali: 'प्रभावकारी',
+        focus: 'People & Leaders',
+        description: 'People who like to work with others and enjoy persuading and performing. People Influencers like to work with people actively influencing, leading or managing them toward organizational goals. Comfortable in business settings.',
+        descriptionNepali: 'उद्यमशील व्यक्तिहरू प्राकृतिक नेता हुन् जसले मनाउन, व्यवस्थापन गर्न र अरूलाई प्रेरित गर्न रमाउँछन्। तिनीहरू महत्वाकांक्षी र प्रतिस्पर्धी छन्।',
+        traits: ['Ambitious', 'Adventurous', 'Assertive', 'Energetic', 'Enthusiastic', 'Confident', 'Optimistic', 'Sociable', 'Persuasive', 'Competitive', 'Risk-taking', 'Dominant', 'Extroverted'],
+        abilities: ['Lead people', 'Sell things or promote ideas', 'Give talks or speeches', 'Organize activities', 'Manage people and projects', 'Make quick decisions'],
+        likes: ['Influence others', 'Run for office', 'Start your own business', 'Make decisions affecting others', 'Be elected to office', 'Win awards', 'Be in a position of power'],
+        hobbies: ['Public speaking', 'Debating', 'Leading organizations', 'Campaigning', 'Starting businesses', 'Networking', 'Community leadership', 'Organizing events', 'Fundraising', 'Competitive activities'],
+        strengths: ['Leadership', 'Persuasion', 'Risk-taking', 'Decision making', 'Public speaking', 'Negotiation'],
+        collegeMajors: ['Fashion Merchandising', 'Real Estate', 'Marketing/Sales', 'Law', 'Political Science', 'International Trade', 'Banking/Finance'],
+        relatedPathways: ['Business', 'Public and Human Services', 'Arts and Communication'],
+        careers: ['Administrative Services Manager', 'Advertising Manager', 'Advertising Sales Agent', 'Agent/Business Manager', 'Air Traffic Controller', 'Bartender', 'Chef and Head Cook', 'Chief Executive', 'Computer and Information Systems Manager', 'Construction Manager', 'Copy Writer', 'Criminal Investigator', 'Curator', 'Customer Service Representative', 'Director', 'Education Administrator', 'Employment Interviewer', 'Engineering Manager', 'Financial Manager', 'Funeral Director', 'Gaming Manager', 'General Operations Manager', 'Human Resources Manager', 'Insurance Sales Agent', 'Judge', 'Lawyer', 'Legislator', 'Loan Counselor', 'Lodging Manager', 'Logistician', 'Marketing Manager', 'Medical Services Manager', 'Meeting Planner', 'Natural Sciences Manager', 'Personal Financial Advisor', 'Personnel Recruiter', 'Private Investigator', 'Producer', 'Property Manager', 'Public Relations Manager', 'Purchasing Manager', 'Real Estate Broker', 'Retail Salesperson', 'Sales Manager', 'Sales Engineer', 'Sheriff', 'Social Services Manager', 'Training Manager', 'Transportation Manager', 'Travel Agent'],
+        occupationsExtended: ['Administrative Law Judges', 'Administrative Services Managers', 'Advertising and Promotions Managers', 'Advertising Sales Agents', 'Agents and Business Managers of Artists', 'Air Traffic Controllers', 'Aircraft Cargo Handling Supervisors', 'Amusement and Recreation Attendants', 'Appraisers', 'Bartenders', 'Chefs and Head Cooks', 'Chief Executives', 'Compensation Managers', 'Computer and Information Systems Managers', 'Construction Managers', 'Copy Writers', 'Criminal Investigators', 'Crop and Livestock Managers', 'Curators', 'Customer Service Representatives', 'Demonstrators and Product Promoters', 'Directors (Stage, Motion Pictures, TV, Radio)', 'Education Administrators', 'Employment Interviewers', 'Engineering Managers', 'Financial Examiners', 'Financial Managers', 'First-Line Supervisors/Managers', 'Flight Attendants', 'Food Service Managers', 'Funeral Directors', 'Gaming Managers', 'General and Operations Managers', 'Hotel/Restaurant Hosts and Hostesses', 'Human Resources Managers', 'Industrial Production Managers', 'Insurance Sales Agents', 'Judges and Magistrates', 'Lawyers', 'Legislators', 'Loan Counselors', 'Lodging Managers', 'Logisticians', 'Marketing Managers', 'Medical and Health Services Managers', 'Meeting and Convention Planners', 'Natural Sciences Managers', 'Opticians', 'Personal Financial Advisors', 'Personnel Recruiters', 'Police Detectives', 'Postmasters', 'Private Detectives', 'Producers', 'Program Directors', 'Property Managers', 'Public Relations Managers', 'Public Relations Specialists', 'Purchasing Managers', 'Railroad Conductors', 'Real Estate Brokers', 'Real Estate Sales Agents', 'Retail Salespersons', 'Sales Agents (Financial/Securities)', 'Sales Engineers', 'Sales Managers', 'Sales Representatives', 'Sheriffs', 'Ship Captains', 'Social and Community Service Managers', 'Storage and Distribution Managers', 'Talent Directors', 'Technical Directors', 'Telemarketers', 'Training Managers', 'Transportation Managers', 'Travel Agents', 'Wholesale Buyers']
     },
     C: {
         name: 'Conventional', nepali: 'परम्परागत', icon: '📊', color: '#0891b2', colorLight: '#ecfeff',
-        subtitle: 'The Organizer', subtitleNepali: 'संगठनकर्ता',
-        description: 'Conventional individuals excel at organizing, managing data, and following established procedures. They are detail-oriented and reliable.',
-        descriptionNepali: 'परम्परागत व्यक्तिहरूले संगठित गर्न, डेटा व्यवस्थापन गर्न र स्थापित प्रक्रियाहरू पालना गर्नमा उत्कृष्ट हुन्छन्।',
-        strengths: ['Organization', 'Attention to detail', 'Data management', 'Following procedures'],
-        careers: ['Accountant', 'Bank Officer', 'Administrative Assistant', 'Auditor', 'Tax Consultant', 'Secretary', 'Data Entry', 'Bookkeeper']
+        subtitle: 'The Organizers', subtitleNepali: 'संगठनकर्ता',
+        focus: 'Detail & Order',
+        description: 'People who are very detail oriented, organized and like to work with data. Data and Detail People prefer to work with data (words and numbers), carrying out detailed instructions or following a prescribed plan.',
+        descriptionNepali: 'परम्परागत व्यक्तिहरूले संगठित गर्न, डेटा व्यवस्थापन गर्न र स्थापित प्रक्रियाहरू पालना गर्नमा उत्कृष्ट हुन्छन्। तिनीहरू विस्तारमुखी र भरपर्दो छन्।',
+        traits: ['Careful', 'Conforming', 'Conscientious', 'Detail-oriented', 'Efficient', 'Orderly', 'Organized', 'Persistent', 'Practical', 'Precise', 'Responsible', 'Structured', 'Systematic', 'Thrifty'],
+        abilities: ['Work well within a system', 'Do a lot of paperwork in a short time', 'Use computers', 'Keep accurate records', 'Write business letters', 'Follow detailed instructions'],
+        likes: ['Work with numbers', 'Have a clear set of rules to follow', 'Type or take notes', 'Follow directions', 'Be responsible for details', 'Collect or organize things'],
+        hobbies: ['Collecting things', 'Organizing files', 'Keeping records', 'Doing puzzles', 'Playing card games', 'Maintaining schedules', 'Budgeting finances', 'Computer activities', 'Reading instruction manuals'],
+        strengths: ['Organization', 'Attention to detail', 'Data management', 'Following procedures', 'Accuracy', 'Reliability'],
+        collegeMajors: ['Accounting', 'Court Reporting', 'Insurance', 'Administration', 'Medical Records', 'Banking', 'Data Processing'],
+        relatedPathways: ['Health Services', 'Business', 'Industrial and Engineering Technology'],
+        careers: ['Accountant', 'Actuary', 'Archivist', 'Assessor', 'Auditor', 'Bookkeeper', 'Budget Analyst', 'Cashier', 'Claims Examiner', 'Cost Estimator', 'Court Reporter', 'Credit Analyst', 'Data Entry Keyer', 'Database Administrator', 'Dental Assistant', 'Dispatcher', 'Executive Secretary', 'File Clerk', 'Financial Analyst', 'Human Resources Assistant', 'Insurance Claims Clerk', 'Insurance Underwriter', 'Legal Secretary', 'Librarian', 'Loan Officer', 'Medical Records Technician', 'Medical Secretary', 'Payroll Clerk', 'Pharmacy Technician', 'Postal Service Clerk', 'Receptionist', 'Secretary', 'Statistical Assistant', 'Statistician', 'Tax Examiner', 'Tax Preparer', 'Teller', 'Web Developer'],
+        occupationsExtended: ['Accountants', 'Actuaries', 'Archivists', 'Assessors', 'Audio-Visual Collections Specialists', 'Auditors', 'Bill and Account Collectors', 'Billing Clerks', 'Bookkeeping Clerks', 'Brokerage Clerks', 'Budget Analysts', 'Cargo and Freight Agents', 'Cashiers', 'City and Regional Planning Aides', 'Claims Examiners', 'Compensation and Benefits Specialists', 'Computer Operators', 'Computer Security Specialists', 'Correspondence Clerks', 'Cost Estimators', 'Costume Attendants', 'Counter and Rental Clerks', 'Court Clerks', 'Court Reporters', 'Credit Analysts', 'Credit Authorizers', 'Credit Checkers', 'Data Entry Keyers', 'Database Administrators', 'Dental Assistants', 'Dispatchers', 'Electronic Drafters', 'Environmental Compliance Inspectors', 'Executive Secretaries', 'File Clerks', 'Financial Analysts', 'Fire Inspectors', 'Gaming and Sports Book Writers', 'Gaming Cage Workers', 'Gaming Dealers', 'Geophysical Data Technicians', 'Government Property Inspectors', 'Hotel and Motel Desk Clerks', 'Human Resources Assistants', 'Immigration Inspectors', 'Inspectors and Testers', 'Insurance Adjusters', 'Insurance Appraisers', 'Insurance Claims Clerks', 'Insurance Policy Processing Clerks', 'Insurance Underwriters', 'Interviewers', 'Job Printers', 'Law Clerks', 'Legal Secretaries', 'Librarians', 'Library Assistants', 'Library Technicians', 'License Clerks', 'Licensing Examiners', 'Loan Interviewers', 'Loan Officers', 'Mail Clerks', 'Mapping Technicians', 'Marking Clerks', 'Medical Records Technicians', 'Medical Secretaries', 'Medical Transcriptionists', 'Meter Readers', 'Municipal Clerks', 'Network Designers', 'New Accounts Clerks', 'Numerical Tool Programmers', 'Occupational Health and Safety Technicians', 'Office Clerks', 'Order Clerks', 'Order Fillers', 'Paralegals', 'Payroll Clerks', 'Pharmacy Aides', 'Pharmacy Technicians', 'Police Identification Officers', 'Postal Service Clerks', 'Postal Service Mail Carriers', 'Procurement Clerks', 'Production Clerks', 'Proofreaders', 'Purchasing Agents', 'Receptionists', 'Reservation Agents', 'Sales Representatives', 'Secretaries', 'Shipping Clerks', 'Social and Human Service Assistants', 'Social Science Research Assistants', 'Statement Clerks', 'Statistical Assistants', 'Statisticians', 'Stock Clerks', 'Switchboard Operators', 'Tax Examiners', 'Tax Preparers', 'Telephone Operators', 'Tellers', 'Title Examiners', 'Treasurers and Controllers', 'Web Administrators', 'Web Developers', 'Word Processors']
     }
 };
 
@@ -359,51 +407,136 @@ async function generatePDFContent(data) {
         </div>`;
     }).join('');
     
-    // Build type detail pages
+    // Build type detail pages with comprehensive RIASEC data
     const typeDetailPages = topThree.map((type, idx) => {
         const info = riasecExtended[type];
         const strengthsHTML = info.strengths.map(s => 
             `<div class="strength"><span class="strength-check">✓</span><span>${s}</span></div>`
         ).join('');
-        const careersHTML = info.careers.map(c => 
+        const traitsHTML = info.traits.slice(0, 8).map(t => 
+            `<span class="trait-tag">${t}</span>`
+        ).join('');
+        const abilitiesHTML = info.abilities.map(a => 
+            `<div class="ability-item"><span class="ability-check">✓</span><span>${a}</span></div>`
+        ).join('');
+        const likesHTML = info.likes.map(l => 
+            `<div class="like-item"><span class="like-icon">♥</span><span>${l}</span></div>`
+        ).join('');
+        const hobbiesHTML = info.hobbies.slice(0, 6).map(h => 
+            `<span class="hobby-tag">${h}</span>`
+        ).join('');
+        const collegeMajorsHTML = info.collegeMajors.map(m => 
+            `<span class="major-tag" style="background:${info.colorLight};color:${info.color};border:1px solid ${info.color}40;">${m}</span>`
+        ).join('');
+        const pathwaysHTML = info.relatedPathways.map(p => 
+            `<span class="pathway-tag">${p}</span>`
+        ).join('');
+        const careersHTML = info.careers.slice(0, 12).map(c => 
             `<span class="career-tag" style="background:${info.colorLight};color:${info.color};border:1px solid ${info.color}40;">${c}</span>`
         ).join('');
+        const extendedOccupationsHTML = info.occupationsExtended.slice(0, 20).map(o => 
+            `<span class="occupation-tag">${o}</span>`
+        ).join('');
         
-        return `<div class="page">
+        // Page 1 for this type: Overview, Traits, Abilities
+        const page1 = `<div class="page">
         <div class="content">
             <div class="page-header">
                 <img src="${companyBranding.logoUrl}" alt="Logo" class="page-logo" onerror="this.style.display='none'">
-                <div class="page-title"><h2>Your #${idx + 1} Interest Type</h2><p>${data.fullName} • ${reportDate}</p></div>
+                <div class="page-title"><h2>Your #${idx + 1} Interest Type: ${info.name}</h2><p>${data.fullName} • ${reportDate}</p></div>
             </div>
             <div class="type-card" style="border-color:${info.color};">
                 <div class="type-header" style="background:${info.colorLight};">
                     <div class="type-icon" style="background:${info.color};color:white;">${info.icon}</div>
                     <div class="type-info">
-                        <h3 style="color:${info.color};">${info.name} (${type})</h3>
-                        <div class="subtitle">${info.subtitle} / ${info.subtitleNepali} • Score: ${scores[type]}/${maxScore}</div>
+                        <h3 style="color:${info.color};">${info.name} (${type}) - ${info.subtitle}</h3>
+                        <div class="subtitle">${info.subtitleNepali} • Focus: ${info.focus} • Score: ${scores[type]}/${maxScore}</div>
                     </div>
                 </div>
                 <div class="type-body">
                     <div class="type-desc">
-                        <strong>English:</strong> ${info.description}<br><br>
+                        <strong>Description:</strong> ${info.description}<br><br>
                         <strong>नेपाली:</strong> ${info.descriptionNepali}
                     </div>
+                    
+                    <div class="type-subsection">
+                        <h4>🧠 Personality Traits - Are You?</h4>
+                        <div class="traits-wrap">${traitsHTML}</div>
+                    </div>
+                    
                     <div class="type-subsection">
                         <h4>💪 Key Strengths</h4>
                         <div class="strengths-grid">${strengthsHTML}</div>
                     </div>
+                    
                     <div class="type-subsection">
-                        <h4>💼 Recommended Careers</h4>
-                        <div class="careers-wrap">${careersHTML}</div>
+                        <h4>🎯 Can You? (Abilities)</h4>
+                        <div class="abilities-grid">${abilitiesHTML}</div>
+                    </div>
+                    
+                    <div class="type-subsection">
+                        <h4>❤️ You Like To...</h4>
+                        <div class="likes-grid">${likesHTML}</div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="page-footer">
             <div class="footer-left"><img src="${companyBranding.logoUrl}" alt="Logo" class="footer-logo" onerror="this.style.display='none'"><span>${companyBranding.name} • ${companyBranding.website}</span></div>
-            <div>Page ${idx + 3}</div>
+            <div>Page ${(idx * 2) + 3}</div>
         </div>
     </div>`;
+        
+        // Page 2 for this type: Hobbies, Education, Careers
+        const page2 = `<div class="page">
+        <div class="content">
+            <div class="page-header">
+                <img src="${companyBranding.logoUrl}" alt="Logo" class="page-logo" onerror="this.style.display='none'">
+                <div class="page-title"><h2>${info.name} - Career Pathways</h2><p>${data.fullName} • ${reportDate}</p></div>
+            </div>
+            <div class="type-card" style="border-color:${info.color};">
+                <div class="type-header" style="background:${info.colorLight};">
+                    <div class="type-icon" style="background:${info.color};color:white;">${info.icon}</div>
+                    <div class="type-info">
+                        <h3 style="color:${info.color};">${info.name} (${type}) - Career Guide</h3>
+                        <div class="subtitle">Education & Career Recommendations</div>
+                    </div>
+                </div>
+                <div class="type-body">
+                    <div class="type-subsection">
+                        <h4>🎨 Hobbies & Interests</h4>
+                        <div class="hobbies-wrap">${hobbiesHTML}</div>
+                    </div>
+                    
+                    <div class="type-subsection">
+                        <h4>🎓 Recommended College Majors</h4>
+                        <div class="majors-wrap">${collegeMajorsHTML}</div>
+                    </div>
+                    
+                    <div class="type-subsection">
+                        <h4>🛤️ Related Career Pathways</h4>
+                        <div class="pathways-wrap">${pathwaysHTML}</div>
+                    </div>
+                    
+                    <div class="type-subsection">
+                        <h4>💼 Top Career Options</h4>
+                        <div class="careers-wrap">${careersHTML}</div>
+                    </div>
+                    
+                    <div class="type-subsection">
+                        <h4>📋 Extended Occupation List</h4>
+                        <div class="occupations-wrap">${extendedOccupationsHTML}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="page-footer">
+            <div class="footer-left"><img src="${companyBranding.logoUrl}" alt="Logo" class="footer-logo" onerror="this.style.display='none'"><span>${companyBranding.name} • ${companyBranding.website}</span></div>
+            <div>Page ${(idx * 2) + 4}</div>
+        </div>
+    </div>`;
+        
+        return page1 + page2;
     }).join('');
     
     // Build summary cards
@@ -497,8 +630,24 @@ async function generatePDFContent(data) {
         .strengths-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
         .strength { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: #f1f5f9; border-radius: 6px; font-size: 12px; }
         .strength-check { color: #059669; font-weight: bold; }
+        .traits-wrap { display: flex; flex-wrap: wrap; gap: 6px; }
+        .trait-tag { padding: 5px 10px; background: #e0e7ff; color: #3730a3; border-radius: 12px; font-size: 11px; font-weight: 500; }
+        .abilities-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+        .ability-item { display: flex; align-items: center; gap: 6px; padding: 6px 10px; background: #ecfdf5; border-radius: 6px; font-size: 11px; }
+        .ability-check { color: #059669; font-weight: bold; }
+        .likes-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+        .like-item { display: flex; align-items: center; gap: 6px; padding: 6px 10px; background: #fef2f2; border-radius: 6px; font-size: 11px; }
+        .like-icon { color: #dc2626; }
+        .hobbies-wrap { display: flex; flex-wrap: wrap; gap: 6px; }
+        .hobby-tag { padding: 5px 10px; background: #fdf4ff; color: #7c3aed; border-radius: 12px; font-size: 11px; font-weight: 500; }
+        .majors-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+        .major-tag { padding: 6px 12px; border-radius: 15px; font-size: 11px; font-weight: 500; }
+        .pathways-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+        .pathway-tag { padding: 6px 12px; background: #fef3c7; color: #92400e; border-radius: 15px; font-size: 11px; font-weight: 500; }
         .careers-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
-        .career-tag { padding: 6px 12px; border-radius: 15px; font-size: 12px; font-weight: 500; }
+        .career-tag { padding: 6px 12px; border-radius: 15px; font-size: 11px; font-weight: 500; }
+        .occupations-wrap { display: flex; flex-wrap: wrap; gap: 5px; }
+        .occupation-tag { padding: 4px 8px; background: #f1f5f9; color: #475569; border-radius: 10px; font-size: 10px; }
         .page-footer { position: absolute; bottom: 0; left: 0; right: 0; padding: 15px 40px; background: linear-gradient(135deg, #1e40af, #3b82f6); display: flex; justify-content: space-between; align-items: center; font-size: 10px; color: white; }
         .footer-left { display: flex; align-items: center; gap: 10px; }
         .footer-logo { height: 30px; border-radius: 6px; }
@@ -630,7 +779,7 @@ async function generatePDFContent(data) {
         </div>
         <div class="page-footer">
             <div class="footer-left"><img src="${companyBranding.logoUrl}" alt="Logo" class="footer-logo" onerror="this.style.display='none'"><span>${companyBranding.name} • ${companyBranding.website}</span></div>
-            <div>Page ${topThree.length + 3}</div>
+            <div>Page ${(topThree.length * 2) + 3}</div>
         </div>
     </div>
     
