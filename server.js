@@ -255,7 +255,7 @@ const companyBranding = {
     nameNepali: 'जस्ट कनेक्ट',
     website: 'https://justconnect.online/',
     email: 'info@justconnect.online',
-    phone: '+977-1-XXXXXXX',
+    phone: '+977-9768818665',
     logoUrl: '/Document.svg',
     tagline: 'Empowering Your Career Journey',
     taglineNepali: 'तपाईंको क्यारियर यात्रामा सशक्तिकरण'
@@ -450,13 +450,12 @@ async function generatePDFContent(data) {
                     <div class="type-icon" style="background:${info.color};color:white;">${info.icon}</div>
                     <div class="type-info">
                         <h3 style="color:${info.color};">${info.name} (${type}) - ${info.subtitle}</h3>
-                        <div class="subtitle">${info.subtitleNepali} • Focus: ${info.focus} • Score: ${scores[type]}/${maxScore}</div>
+                        <div class="subtitle">Focus: ${info.focus} • Score: ${scores[type]}/${maxScore}</div>
                     </div>
                 </div>
                 <div class="type-body">
                     <div class="type-desc">
-                        <strong>Description:</strong> ${info.description}<br><br>
-                        <strong>नेपाली:</strong> ${info.descriptionNepali}
+                        ${info.description}
                     </div>
                     
                     <div class="type-subsection">
@@ -585,9 +584,9 @@ async function generatePDFContent(data) {
         .cover-code-letters { display: flex; gap: 12px; justify-content: center; }
         .cover-code-letter { width: 60px; height: 60px; background: white; color: #1e40af; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 800; }
         .cover-footer { padding: 20px 40px; border-top: 1px solid rgba(255,255,255,0.15); display: flex; justify-content: space-between; font-size: 11px; opacity: 0.7; }
-        .content { padding: 35px 40px 80px; }
-        .page-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 18px; border-bottom: 2px solid #e2e8f0; margin-bottom: 25px; }
-        .page-logo { height: 60px; border-radius: 10px; }
+        .content { padding: 30px 40px 60px; }
+        .page-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 15px; border-bottom: 2px solid #e2e8f0; margin-bottom: 20px; }
+        .page-logo { height: 100px; border-radius: 10px; }
         .page-title h2 { font-size: 20px; font-weight: 700; color: #1e40af; }
         .page-title p { font-size: 11px; color: #64748b; }
         .section { margin-bottom: 25px; }
@@ -650,7 +649,7 @@ async function generatePDFContent(data) {
         .occupation-tag { padding: 4px 8px; background: #f1f5f9; color: #475569; border-radius: 10px; font-size: 10px; }
         .page-footer { position: absolute; bottom: 0; left: 0; right: 0; padding: 15px 40px; background: linear-gradient(135deg, #1e40af, #3b82f6); display: flex; justify-content: space-between; align-items: center; font-size: 10px; color: white; }
         .footer-left { display: flex; align-items: center; gap: 10px; }
-        .footer-logo { height: 30px; border-radius: 6px; }
+        .footer-logo { height: 50px; border-radius: 6px; }
         .summary-box { background: linear-gradient(135deg, #eff6ff, #dbeafe); padding: 22px; border-radius: 12px; border: 1px solid #93c5fd; margin-bottom: 22px; }
         .summary-box p { font-size: 15px; line-height: 1.8; color: #1e40af; }
         .summary-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px; }
@@ -710,14 +709,14 @@ async function generatePDFContent(data) {
             <div class="section">
                 <div class="section-title"><span class="section-icon">👤</span>Personal Information</div>
                 <div class="info-grid">
-                    <div class="info-item"><span class="info-label">Full Name</span><span class="info-value">${data.fullName}</span></div>
-                    <div class="info-item"><span class="info-label">Email</span><span class="info-value">${data.email || 'N/A'}</span></div>
-                    <div class="info-item"><span class="info-label">Phone</span><span class="info-value">${data.phone || 'N/A'}</span></div>
-                    <div class="info-item"><span class="info-label">Age</span><span class="info-value">${data.age || 'N/A'} years</span></div>
-                    <div class="info-item"><span class="info-label">Gender</span><span class="info-value">${genderDisplay}</span></div>
-                    <div class="info-item"><span class="info-label">Education</span><span class="info-value">${data.education ? data.education.replace('_', ' ') : 'N/A'}</span></div>
-                    <div class="info-item"><span class="info-label">Occupation</span><span class="info-value">${data.occupation || 'N/A'}</span></div>
-                    <div class="info-item"><span class="info-label">Location</span><span class="info-value">${data.location || 'N/A'}</span></div>
+                    <div class="info-item"><span class="info-label">FULL NAME:</span><span class="info-value">${data.fullName}</span></div>
+                    <div class="info-item"><span class="info-label">EMAIL:</span><span class="info-value">${data.email || 'N/A'}</span></div>
+                    <div class="info-item"><span class="info-label">PHONE:</span><span class="info-value">${data.phone || 'N/A'}</span></div>
+                    <div class="info-item"><span class="info-label">AGE:</span><span class="info-value">${data.age || 'N/A'} years</span></div>
+                    <div class="info-item"><span class="info-label">GENDER:</span><span class="info-value">${genderDisplay}</span></div>
+                    <div class="info-item"><span class="info-label">EDUCATION:</span><span class="info-value">${data.education ? data.education.replace('_', ' ') : 'N/A'}</span></div>
+                    <div class="info-item"><span class="info-label">OCCUPATION:</span><span class="info-value">${data.occupation || 'N/A'}</span></div>
+                    <div class="info-item"><span class="info-label">LOCATION:</span><span class="info-value">${data.location || 'N/A'}</span></div>
                 </div>
             </div>
             <div class="section">
@@ -727,9 +726,9 @@ async function generatePDFContent(data) {
                 </div>
             </div>
             <div class="holland-section">
-                <div class="holland-title">Your Holland Code / तपाईंको होल्याण्ड कोड</div>
+                <div class="holland-title">Your Holland Code / Interest Profile</div>
                 <div class="holland-letters">${hollandLettersLabeled}</div>
-                <div class="holland-meaning">${hollandMeaning}</div>
+                <div class="holland-meaning">${topThree.map(t => riasecExtended[t].name).join(' - ')}</div>
             </div>
             <div class="section">
                 <div class="section-title"><span class="section-icon">📈</span>RIASEC Score Breakdown</div>
