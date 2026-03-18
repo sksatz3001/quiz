@@ -8,7 +8,8 @@
     "dev": "node server.js"
   },
   "dependencies": {
-    "pg": "^8.11.3"
+    "pg": "^8.11.3",
+    "nodemailer": "^6.9.7"
   },
   "keywords": [
     "quiz",

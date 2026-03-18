@@ -640,6 +640,83 @@
             to { transform: rotate(360deg); }
         }
 
+        /* Feedback Screen */
+        .feedback-screen {
+            display: none;
+        }
+
+        .feedback-screen.active {
+            display: block;
+        }
+
+        .feedback-form {
+            background: var(--bg-card);
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .feedback-form h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .feedback-form p {
+            color: var(--text-secondary);
+            text-align: center;
+            margin-bottom: 24px;
+            font-size: 0.9rem;
+        }
+
+        .rating-group {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .rating-btn {
+            width: 50px;
+            height: 50px;
+            border: 2px solid var(--border);
+            background: white;
+            border-radius: 10px;
+            font-size: 1.25rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .rating-btn:hover {
+            border-color: var(--primary);
+            transform: scale(1.1);
+        }
+
+        .rating-btn.selected {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .feedback-textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            resize: vertical;
+            margin-bottom: 16px;
+        }
+
+        .feedback-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
         /* Form Styles */
         .form-group {
             margin-bottom: 20px;
@@ -856,6 +933,39 @@
 
         <!-- Results Screen -->
         <div class="results-screen" id="resultsScreen"></div>
+
+        <!-- Feedback Screen -->
+        <div class="feedback-screen" id="feedbackScreen">
+            <div class="card feedback-form">
+                <h3 id="feedbackTitle">How was your experience?</h3>
+                <p id="feedbackSubtitle">Please rate your experience and share your feedback</p>
+                
+                <div class="form-group">
+                    <label id="ratingLabel">Rating:</label>
+                    <div class="rating-group">
+                        <button class="rating-btn" data-rating="1" onclick="selectRating(1)">😞</button>
+                        <button class="rating-btn" data-rating="2" onclick="selectRating(2)">😐</button>
+                        <button class="rating-btn" data-rating="3" onclick="selectRating(3)">🙂</button>
+                        <button class="rating-btn" data-rating="4" onclick="selectRating(4)">😊</button>
+                        <button class="rating-btn" data-rating="5" onclick="selectRating(5)">😍</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label id="feedbackLabel">Your Feedback (Optional):</label>
+                    <textarea 
+                        class="feedback-textarea" 
+                        id="feedbackText"
+                        placeholder="Share your thoughts about the assessment..."
+                    ></textarea>
+                </div>
+
+                <button class="btn-primary" id="submitFeedbackBtn" onclick="submitFeedback()">
+                    Submit & Continue
+                </button>
+            </div>
+        </div>
+
         </div><!-- End mainContent -->
     </div>
 
@@ -913,6 +1023,12 @@
                 suggestedCareers: 'Suggested Careers',
                 downloadReport: '📄 Download Report (PDF)',
                 retakeTest: 'Retake Assessment',
+                feedbackTitle: 'How was your experience?',
+                feedbackSubtitle: 'Please rate your experience and share your feedback',
+                ratingLabel: 'Rating:',
+                feedbackLabel: 'Your Feedback (Optional):',
+                feedbackPlaceholder: 'Share your thoughts about the assessment...',
+                submitFeedback: 'Submit & Continue',
                 categories: {
                     R: 'R · Realistic',
                     I: 'I · Investigative',
@@ -970,6 +1086,12 @@
                 suggestedCareers: 'सुझाव गरिएका क्यारियरहरू',
                 downloadReport: '📄 प्रतिवेदन डाउनलोड गर्नुहोस् (PDF)',
                 retakeTest: 'पुन: मूल्याङ्कन गर्नुहोस्',
+                feedbackTitle: 'तपाईंको अनुभव कस्तो रह्यो?',
+                feedbackSubtitle: 'कृपया तपाईंको अनुभव मूल्याङ्कन गर्नुहोस् र प्रतिक्रिया दिनुहोस्',
+                ratingLabel: 'मूल्याङ्कन:',
+                feedbackLabel: 'तपाईंको प्रतिक्रिया (वैकल्पिक):',
+                feedbackPlaceholder: 'मूल्यांकन बारे आफ्नो विचार साझा गर्नुहोस्...',
+                submitFeedback: 'पेश गर्नुहोस् र जारी राख्नुहोस्',
                 categories: {
                     R: 'R · यथार्थवादी',
                     I: 'I · अन्वेषणात्मक',
@@ -1324,7 +1446,7 @@
                 currentQuestion++;
                 renderQuestion();
             } else {
-                showResults();
+                showFeedbackScreen();
             }
         }
 
@@ -1349,6 +1471,56 @@
 
         function getMaxScore(type) {
             return questions.filter(q => q.type === type).length;
+        }
+
+        let selectedRating = null;
+
+        function showFeedbackScreen() {
+            document.getElementById('questionScreen').classList.remove('active');
+            document.getElementById('progressSection').classList.remove('active');
+            document.getElementById('feedbackScreen').classList.add('active');
+            
+            const t = translations[currentLang];
+            document.getElementById('feedbackTitle').textContent = t.feedbackTitle;
+            document.getElementById('feedbackSubtitle').textContent = t.feedbackSubtitle;
+            document.getElementById('ratingLabel').textContent = t.ratingLabel;
+            document.getElementById('feedbackLabel').textContent = t.feedbackLabel;
+            document.getElementById('feedbackText').placeholder = t.feedbackPlaceholder;
+            document.getElementById('submitFeedbackBtn').textContent = t.submitFeedback;
+        }
+
+        function selectRating(rating) {
+            selectedRating = rating;
+            document.querySelectorAll('.rating-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            document.querySelector(`[data-rating="${rating}"]`).classList.add('selected');
+        }
+
+        async function submitFeedback() {
+            const feedbackText = document.getElementById('feedbackText').value;
+            
+            // Save feedback to database
+            try {
+                await fetch('/api/feedback', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        sessionId: userSessionId,
+                        rating: selectedRating,
+                        feedback: feedbackText,
+                        timestamp: new Date().toISOString()
+                    })
+                });
+            } catch (error) {
+                console.error('Error saving feedback:', error);
+            }
+
+            // Show results screen
+            document.getElementById('feedbackScreen').classList.remove('active');
+            showResults();
         }
 
         function showResults() {

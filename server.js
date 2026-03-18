@@ -3,6 +3,7 @@ const https = require('https');
 const fs = require('fs');
 const path = require('path');
 const { Pool } = require('pg');
+const nodemailer = require('nodemailer');
 
 // Load environment variables from .env file
 try {
@@ -17,10 +18,10 @@ try {
     console.log('.env file not found, using environment variables');
 }
 
-// OpenAI API Key (set via environment variable)
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY || '';
+// OpenRouter API Key (set via environment variable)
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || '';
 
-// Function to generate AI summary using OpenAI
+// Function to generate AI summary using OpenRouter (GPT-4o-mini)
 async function generateAISummary(userData) {
     try {
         const topThree = userData.topThreeCode.split('');
@@ -52,7 +53,7 @@ Keep it professional but friendly. Write in second person (you/your). Maximum 4 
 
         return new Promise((resolve) => {
             const requestData = JSON.stringify({
-                model: 'gpt-4o-mini',
+                model: 'openai/gpt-4o-mini',
                 messages: [
                     { role: 'system', content: 'You are a professional career counselor providing personalized career guidance.' },
                     { role: 'user', content: prompt }
@@ -62,13 +63,15 @@ Keep it professional but friendly. Write in second person (you/your). Maximum 4 
             });
 
             const options = {
-                hostname: 'api.openai.com',
+                hostname: 'openrouter.ai',
                 port: 443,
-                path: '/v1/chat/completions',
+                path: '/api/v1/chat/completions',
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${OPENAI_API_KEY}`,
+                    'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+                    'HTTP-Referer': 'https://justconnect.online',
+                    'X-Title': 'Just Connect Career Assessment',
                     'Content-Length': Buffer.byteLength(requestData)
                 }
             };
@@ -82,23 +85,23 @@ Keep it professional but friendly. Write in second person (you/your). Maximum 4 
                         if (parsed.choices && parsed.choices[0] && parsed.choices[0].message) {
                             resolve(parsed.choices[0].message.content.trim());
                         } else {
-                            console.error('OpenAI response error:', responseData);
+                            console.error('OpenRouter response error:', responseData);
                             resolve(generateFallbackSummary(userData));
                         }
                     } catch (e) {
-                        console.error('Error parsing OpenAI response:', e);
+                        console.error('Error parsing OpenRouter response:', e);
                         resolve(generateFallbackSummary(userData));
                     }
                 });
             });
 
             req.on('error', (e) => {
-                console.error('OpenAI request error:', e);
+                console.error('OpenRouter request error:', e);
                 resolve(generateFallbackSummary(userData));
             });
 
             req.setTimeout(10000, () => {
-                console.error('OpenAI request timeout');
+                console.error('OpenRouter request timeout');
                 req.destroy();
                 resolve(generateFallbackSummary(userData));
             });
@@ -173,6 +176,17 @@ async function initDatabase() {
                     ALTER TABLE quiz_results ADD COLUMN started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
                 END IF;
             END $$;
+        `);
+
+        // Feedback table
+        await pool.query(`
+            CREATE TABLE IF NOT EXISTS feedback (
+                id SERIAL PRIMARY KEY,
+                session_id VARCHAR(255),
+                rating INTEGER,
+                feedback TEXT,
+                timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
         `);
         
         console.log('Database tables initialized');
@@ -260,6 +274,17 @@ const companyBranding = {
     tagline: 'Empowering Your Career Journey',
     taglineNepali: 'तपाईंको क्यारियर यात्रामा सशक्तिकरण'
 };
+
+// Email transporter configuration - Hostinger SMTP
+const transporter = nodemailer.createTransporter({
+    host: 'smtp.hostinger.com',
+    port: 465,
+    secure: true, // SSL/TLS
+    auth: {
+        user: process.env.EMAIL_USER || 'info@justconnect.online',
+        pass: process.env.EMAIL_PASS || '' // Set this in .env file
+    }
+});
 
 // Extended RIASEC descriptions for professional report - Based on RIASEC Detailed PDF and RIASEC Occupations
 const riasecExtended = {
@@ -440,6 +465,7 @@ async function generatePDFContent(data) {
         
         // Page 1 for this type: Overview, Traits, Abilities
         const page1 = `<div class="page">
+        <div class="watermark"><img src="${companyBranding.logoUrl}" alt="Watermark"></div>
         <div class="content">
             <div class="page-header">
                 <img src="${companyBranding.logoUrl}" alt="Logo" class="page-logo" onerror="this.style.display='none'">
@@ -488,6 +514,7 @@ async function generatePDFContent(data) {
         
         // Page 2 for this type: Hobbies, Education, Careers
         const page2 = `<div class="page">
+        <div class="watermark"><img src="${companyBranding.logoUrl}" alt="Watermark"></div>
         <div class="content">
             <div class="page-header">
                 <img src="${companyBranding.logoUrl}" alt="Logo" class="page-logo" onerror="this.style.display='none'">
@@ -570,8 +597,8 @@ async function generatePDFContent(data) {
         .cover-header { padding: 30px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.15); }
         .cover-logo { width: 100px; height: 100px; border-radius: 16px; background: white; padding: 8px; object-fit: contain; }
         .cover-company { text-align: right; }
-        .cover-company-name { font-size: 20px; font-weight: 700; }
-        .cover-company-tagline { font-size: 12px; opacity: 0.8; }
+        .cover-company-name { font-size: 36px; font-weight: 700; }
+        .cover-company-tagline { font-size: 14px; opacity: 0.8; }
         .cover-main { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 40px; }
         .cover-icon { font-size: 70px; margin-bottom: 25px; }
         .cover-title { font-size: 38px; font-weight: 800; margin-bottom: 8px; letter-spacing: -1px; }
@@ -668,6 +695,8 @@ async function generatePDFContent(data) {
         .contact-info { display: flex; justify-content: center; gap: 25px; flex-wrap: wrap; font-size: 12px; }
         .print-btn { position: fixed; bottom: 25px; right: 25px; background: linear-gradient(135deg, #3b82f6, #1e40af); color: white; border: none; padding: 14px 28px; border-radius: 50px; font-size: 15px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 18px rgba(59, 130, 246, 0.4); display: flex; align-items: center; gap: 8px; z-index: 1000; }
         .print-btn:hover { transform: translateY(-2px); }
+        .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.03; z-index: 0; pointer-events: none; }
+        .watermark img { width: 400px; height: 400px; object-fit: contain; }
     </style>
 </head>
 <body>
@@ -701,6 +730,7 @@ async function generatePDFContent(data) {
     
     <!-- PAGE 2: PROFILE & SCORES -->
     <div class="page">
+        <div class="watermark"><img src="${companyBranding.logoUrl}" alt="Watermark"></div>
         <div class="content">
             <div class="page-header">
                 <img src="${companyBranding.logoUrl}" alt="Logo" class="page-logo" onerror="this.style.display='none'">
@@ -746,6 +776,7 @@ async function generatePDFContent(data) {
     
     <!-- SUMMARY PAGE -->
     <div class="page">
+        <div class="watermark"><img src="${companyBranding.logoUrl}" alt="Watermark"></div>
         <div class="content">
             <div class="page-header">
                 <img src="${companyBranding.logoUrl}" alt="Logo" class="page-logo" onerror="this.style.display='none'">
@@ -907,12 +938,67 @@ const server = http.createServer(async (req, res) => {
         return;
     }
 
+    // ============ SAVE FEEDBACK ============
+    if (req.method === 'POST' && pathname === '/api/feedback') {
+        try {
+            const data = await parseBody(req);
+            await pool.query(
+                'INSERT INTO feedback (session_id, rating, feedback, timestamp) VALUES ($1, $2, $3, $4)',
+                [data.sessionId, data.rating, data.feedback, data.timestamp]
+            );
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ success: true }));
+        } catch (error) {
+            console.error('Error saving feedback:', error);
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'Failed to save feedback' }));
+        }
+        return;
+    }
+
     // ============ GENERATE PDF ============
     if (req.method === 'POST' && pathname === '/api/generate-pdf') {
         try {
             const data = await parseBody(req);
             const pdfHtml = await generatePDFContent(data);
             const safeName = (data.fullName || 'User').replace(/\s+/g, '_');
+            
+            // Send email if email is provided
+            if (data.email) {
+                try {
+                    await transporter.sendMail({
+                        from: `"Just Connect" <${process.env.EMAIL_USER || 'info@justconnect.online'}>`,
+                        to: data.email,
+                        subject: `Your Career Assessment Report - ${data.fullName}`,
+                        html: `
+                            <h2>Your RIASEC Career Assessment Report</h2>
+                            <p>Dear ${data.fullName},</p>
+                            <p>Thank you for completing the RIASEC Career Assessment. Your Holland Code is: <strong>${data.topThreeCode}</strong></p>
+                            <p>Please find your detailed report in the attachment or you can view it online by opening the HTML file sent to you.</p>
+                            <p>Your report contains:</p>
+                            <ul>
+                                <li>Detailed analysis of your top interest types</li>
+                                <li>Personalized career recommendations</li>
+                                <li>College major suggestions</li>
+                                <li>Comprehensive occupation lists</li>
+                            </ul>
+                            <p>If you have any questions or need career counseling, please contact us:</p>
+                            <p>📞 ${companyBranding.phone}<br>
+                            📧 ${companyBranding.email}<br>
+                            🌐 ${companyBranding.website}</p>
+                            <p>Best regards,<br>Just Connect Team</p>
+                        `,
+                        attachments: [{
+                            filename: `RIASEC_Report_${safeName}.html`,
+                            content: pdfHtml
+                        }]
+                    });
+                    console.log(`Report emailed to ${data.email}`);
+                } catch (emailError) {
+                    console.error('Error sending email:', emailError);
+                    // Continue even if email fails
+                }
+            }
             
             res.writeHead(200, { 
                 'Content-Type': 'text/html',
