@@ -276,7 +276,7 @@ const companyBranding = {
 };
 
 // Email transporter configuration - Hostinger SMTP
-const transporter = nodemailer.createTransporter({
+const transporter = nodemailer.createTransport({
     host: 'smtp.hostinger.com',
     port: 465,
     secure: true, // SSL/TLS
