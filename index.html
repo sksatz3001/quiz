@@ -1646,10 +1646,16 @@
                 
                 if (response.ok) {
                     const html = await response.text();
-                    // Open in new window for printing
-                    const printWindow = window.open('', '_blank');
-                    printWindow.document.write(html);
-                    printWindow.document.close();
+                    // Download as HTML file
+                    const blob = new Blob([html], { type: 'text/html' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `RIASEC_Report_${(userData.fullName || 'Report').replace(/\s+/g, '_')}.html`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
                 } else {
                     alert(currentLang === 'ne' ? 'प्रतिवेदन उत्पन्न गर्न असफल भयो। कृपया पुन: प्रयास गर्नुहोस्।' : 'Failed to generate report. Please try again.');
                 }
