@@ -385,6 +385,17 @@ function isAdminAuthenticated(req) {
     return false;
 }
 
+// Load logo as base64 data URI for embedding in PDF reports
+let logoDataUri = '/Document.svg'; // fallback
+try {
+    const logoPath = path.join(__dirname, 'Document.svg');
+    const logoBuffer = fs.readFileSync(logoPath);
+    logoDataUri = 'data:image/svg+xml;base64,' + logoBuffer.toString('base64');
+    console.log('Logo loaded as base64 data URI for PDF embedding');
+} catch (e) {
+    console.log('Could not load logo for embedding, using relative URL fallback');
+}
+
 // Company branding configuration (can be updated by admin)
 const companyBranding = {
     name: 'Just Connect',
@@ -392,10 +403,12 @@ const companyBranding = {
     website: 'https://justconnect.online/',
     email: 'info@justconnect.online',
     phone: '+977-9768818665',
-    logoUrl: '/Document.svg',
+    logoUrl: logoDataUri,
     tagline: 'Empowering Your Career Journey',
     taglineNepali: 'तपाईंको क्यारियर यात्रामा सशक्तिकरण'
 };
+
+const isRenderEnvironment = Boolean(process.env.RENDER || process.env.RENDER_EXTERNAL_URL);
 
 // Email transporter configuration - Hostinger SMTP
 // Using port 587 with STARTTLS (Render blocks port 465)
@@ -1027,8 +1040,8 @@ const server = http.createServer(async (req, res) => {
             const pdfHtml = await generatePDFContent(data);
             const safeName = (data.fullName || 'User').replace(/\s+/g, '_');
             
-            // Send email if email is provided
-            if (data.email) {
+            // Send email if email is provided and SMTP is usable
+            if (data.email && !isRenderEnvironment) {
                 try {
                     await transporter.sendMail({
                         from: `"Just Connect" <${process.env.EMAIL_USER || 'info@justconnect.online'}>`,
@@ -1062,6 +1075,8 @@ const server = http.createServer(async (req, res) => {
                     console.error('Error sending email:', emailError);
                     // Continue even if email fails
                 }
+            } else if (data.email && isRenderEnvironment) {
+                console.log(`Skipping email to ${data.email}: outbound SMTP is blocked on Render`);
             }
             
             res.writeHead(200, { 
