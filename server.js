@@ -398,26 +398,64 @@ const companyBranding = {
 };
 
 // Email transporter configuration - Hostinger SMTP
+// Using port 587 with STARTTLS (Render blocks port 465)
 const transporter = nodemailer.createTransport({
     host: 'smtp.hostinger.com',
-    port: 465,
-    secure: true, // SSL/TLS
+    port: 587,
+    secure: false, // Use STARTTLS (upgrades to TLS after connection)
+    requireTLS: true, // Force STARTTLS upgrade
     auth: {
         user: process.env.EMAIL_USER || 'info@justconnect.online',
         pass: process.env.EMAIL_PASS || '' // Set this in .env file
-    }
+    },
+    tls: {
+        minVersion: 'TLSv1.2',
+        rejectUnauthorized: false
+    },
+    connectionTimeout: 30000, // 30 seconds
+    greetingTimeout: 30000,
+    socketTimeout: 60000
 });
 
 // Generate Professional Multi-Page PDF Report
 async function generatePDFContent(data) {
-    const scores = data.scores;
-    const topThree = data.topThreeCode.split('');
-    const sortedTypes = Object.entries(scores).sort((a, b) => b[1] - a[1]);
-    const maxScore = 7;
-    const reportDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-    
-    // Generate AI-powered personalized summary
-    const aiSummary = await generateAISummary(data);
+    try {
+        console.log('Starting PDF generation for:', data.fullName);
+        const scores = data.scores || {};
+        
+        // Validate topThreeCode - must be 3 valid RIASEC letters
+        const validTypes = ['R', 'I', 'A', 'S', 'E', 'C'];
+        let topThree;
+        
+        if (data.topThreeCode && data.topThreeCode !== 'N/A' && data.topThreeCode.length >= 3) {
+            topThree = data.topThreeCode.split('').filter(t => validTypes.includes(t));
+        }
+        
+        // If topThreeCode is invalid, derive from scores
+        if (!topThree || topThree.length < 3) {
+            console.log('Invalid topThreeCode, deriving from scores...');
+            const sortedByScore = Object.entries(scores)
+                .filter(([type]) => validTypes.includes(type))
+                .sort((a, b) => b[1] - a[1]);
+            topThree = sortedByScore.slice(0, 3).map(([type]) => type);
+            
+            // Fallback if still not enough valid types
+            if (topThree.length < 3) {
+                topThree = ['R', 'I', 'A']; // Default fallback
+                console.log('Using default fallback Holland Code: RIA');
+            }
+        }
+        
+        const sortedTypes = Object.entries(scores)
+            .filter(([type]) => validTypes.includes(type))
+            .sort((a, b) => b[1] - a[1]);
+        const maxScore = 7;
+        const reportDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+        
+        // Generate AI-powered personalized summary
+        console.log('Generating AI summary...');
+        const aiSummary = await generateAISummary(data);
+        console.log('AI summary generated successfully');
     
     // Build Holland Code letters HTML
     const hollandLettersHTML = topThree.map(t => 
@@ -838,6 +876,10 @@ async function generatePDFContent(data) {
     <button class="print-btn no-print" onclick="window.print()">🖨️ Print / Save as PDF</button>
 </body>
 </html>`;
+    } catch (error) {
+        console.error('Error in generatePDFContent:', error);
+        throw error;
+    }
 }
 
 const server = http.createServer(async (req, res) => {
@@ -1029,8 +1071,14 @@ const server = http.createServer(async (req, res) => {
             res.end(pdfHtml);
         } catch (error) {
             console.error('Error generating PDF:', error);
+            console.error('Error stack:', error.stack);
+            console.error('Error details:', {
+                message: error.message,
+                name: error.name,
+                code: error.code
+            });
             res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Failed to generate PDF' }));
+            res.end(JSON.stringify({ error: 'Failed to generate PDF', details: error.message }));
         }
         return;
     }
