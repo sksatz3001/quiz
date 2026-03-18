@@ -21,11 +21,45 @@ try {
 // OpenRouter API Key (set via environment variable)
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || '';
 
-// Function to generate AI summary using OpenRouter (GPT-4o-mini)
-async function generateAISummary(userData) {
+// Fallback summary if AI fails
+function generateFallbackSummary(userData) {
+    if (!userData || !userData.topThreeCode) {
+        return 'Based on your RIASEC assessment, you have a unique combination of interests that can lead to a fulfilling career. Consider exploring careers that align with your top interest areas and leverage your natural strengths.';
+    }
     try {
         const topThree = userData.topThreeCode.split('');
-        const topTypes = topThree.map(t => riasecExtended[t].name).join(', ');
+        const topTypes = topThree.map(t => riasecExtended[t]?.name || t).join(', ');
+        const name = userData.fullName || 'Based on your assessment';
+        const education = userData.education ? userData.education.replace('_', ' ') : 'your field';
+        return `${name}, your Holland Code ${userData.topThreeCode} reveals strong interests in ${topTypes} areas. This unique combination suggests you would excel in careers that blend these interests together. Your background in ${education} provides a solid foundation for exploring these career paths. Consider roles that allow you to combine these interests for maximum career satisfaction.`;
+    } catch (error) {
+        console.error('Error in generateFallbackSummary:', error);
+        return 'Based on your assessment, you have a unique combination of interests that can lead to a fulfilling career path.';
+    }
+}
+
+// Function to generate AI summary using OpenRouter (GPT-4o-mini)
+async function generateAISummary(userData) {
+    // Return fallback immediately if no API key
+    if (!OPENROUTER_API_KEY) {
+        console.log('No OpenRouter API key, using fallback summary');
+        return generateFallbackSummary(userData);
+    }
+
+    try {
+        if (!userData || !userData.topThreeCode) {
+            return generateFallbackSummary(userData);
+        }
+
+        const topThree = userData.topThreeCode.split('');
+        
+        // Check if riasecExtended is available
+        if (typeof riasecExtended === 'undefined') {
+            console.error('riasecExtended not yet defined');
+            return generateFallbackSummary(userData);
+        }
+        
+        const topTypes = topThree.map(t => riasecExtended[t]?.name || t).join(', ');
         
         const prompt = `You are a professional career counselor. Generate a personalized 3-4 sentence career summary for this person based on their RIASEC assessment results.
 
@@ -113,18 +147,6 @@ Keep it professional but friendly. Write in second person (you/your). Maximum 4 
         console.error('Error in generateAISummary:', error);
         return generateFallbackSummary(userData);
     }
-}
-
-// Fallback summary if AI fails
-function generateFallbackSummary(userData) {
-    if (!userData || !userData.topThreeCode) {
-        return 'Based on your RIASEC assessment, you have a unique combination of interests that can lead to a fulfilling career. Consider exploring careers that align with your top interest areas and leverage your natural strengths.';
-    }
-    const topThree = userData.topThreeCode.split('');
-    const topTypes = topThree.map(t => riasecExtended[t]?.name || t).join(', ');
-    const name = userData.fullName || 'Based on your assessment';
-    const education = userData.education ? userData.education.replace('_', ' ') : 'your field';
-    return `${name}, your Holland Code ${userData.topThreeCode} reveals strong interests in ${topTypes} areas. This unique combination suggests you would excel in careers that blend these interests together. Your background in ${education} provides a solid foundation for exploring these career paths. Consider roles that allow you to combine these interests for maximum career satisfaction.`;
 }
 
 // PostgreSQL connection using Neon
