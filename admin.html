@@ -519,6 +519,25 @@
             background: #6d28d9;
         }
 
+        .feedback-btn {
+            padding: 10px 20px;
+            background: #f59e0b;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.2s;
+        }
+
+        .feedback-btn:hover {
+            background: #d97706;
+        }
+
         /* Analytics Section */
         .analytics-section {
             display: none;
@@ -527,6 +546,75 @@
 
         .analytics-section.active {
             display: block;
+        }
+
+        /* Feedback Section */
+        .feedback-section {
+            display: none;
+            margin-bottom: 30px;
+        }
+
+        .feedback-section.active {
+            display: block;
+        }
+
+        .feedback-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid #f59e0b;
+        }
+
+        .feedback-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .feedback-rating {
+            font-size: 28px;
+        }
+
+        .feedback-time {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .feedback-user {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 8px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .feedback-user-info {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .feedback-user-info strong {
+            color: #1e293b;
+            font-weight: 600;
+        }
+
+        .feedback-text {
+            color: #374151;
+            font-size: 14px;
+            line-height: 1.6;
+            background: #f8fafc;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .feedback-empty {
+            text-align: center;
+            padding: 40px;
+            color: #64748b;
         }
 
         .analytics-grid {
@@ -683,6 +771,17 @@
                 <button class="analytics-btn" onclick="toggleAnalytics()">
                     📊 View Analytics
                 </button>
+                <button class="feedback-btn" onclick="toggleFeedback()">
+                    💬 View Feedback
+                </button>
+            </div>
+
+            <!-- Feedback Section -->
+            <div class="feedback-section" id="feedbackSection">
+                <h2 style="font-size: 20px; margin-bottom: 20px; color: #1e293b;">📝 User Feedback</h2>
+                <div id="feedbackContainer">
+                    <div class="feedback-empty">Loading feedback...</div>
+                </div>
             </div>
 
             <!-- Analytics Section -->
@@ -1304,6 +1403,80 @@
                     </div>
                 `;
             }).join('');
+        }
+
+        // Toggle Feedback Section
+        async function toggleFeedback() {
+            const section = document.getElementById('feedbackSection');
+            const isActive = section.classList.contains('active');
+            
+            if (isActive) {
+                section.classList.remove('active');
+            } else {
+                section.classList.add('active');
+                await loadFeedback();
+            }
+        }
+
+        // Load Feedback
+        async function loadFeedback() {
+            try {
+                const response = await fetch('/api/admin/feedback');
+                if (!response.ok) throw new Error('Failed to fetch feedback');
+                
+                const feedbacks = await response.json();
+                const container = document.getElementById('feedbackContainer');
+                
+                if (feedbacks.length === 0) {
+                    container.innerHTML = '<div class="feedback-empty">No feedback submitted yet.</div>';
+                    return;
+                }
+                
+                // Rating emoji mapping
+                const ratingEmojis = {
+                    1: '😞',
+                    2: '😐',
+                    3: '🙂',
+                    4: '😊',
+                    5: '😍'
+                };
+                
+                container.innerHTML = feedbacks.map(fb => {
+                    const date = new Date(fb.timestamp).toLocaleString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                    
+                    return `
+                        <div class="feedback-card">
+                            <div class="feedback-header">
+                                <div class="feedback-rating">${ratingEmojis[fb.rating] || '🙂'}</div>
+                                <div class="feedback-time">${date}</div>
+                            </div>
+                            ${fb.name || fb.email || fb.phone ? `
+                            <div class="feedback-user">
+                                ${fb.name ? `<div class="feedback-user-info"><strong>Name:</strong> ${fb.name}</div>` : ''}
+                                ${fb.email ? `<div class="feedback-user-info"><strong>Email:</strong> ${fb.email}</div>` : ''}
+                                ${fb.phone ? `<div class="feedback-user-info"><strong>Phone:</strong> ${fb.phone}</div>` : ''}
+                            </div>
+                            ` : ''}
+                            ${fb.feedback ? `
+                            <div class="feedback-text">
+                                ${fb.feedback}
+                            </div>
+                            ` : '<div class="feedback-text" style="font-style: italic; color: #94a3b8;">No comment provided</div>'}
+                        </div>
+                    `;
+                }).join('');
+                
+            } catch (error) {
+                console.error('Error loading feedback:', error);
+                document.getElementById('feedbackContainer').innerHTML = 
+                    '<div class="feedback-empty">Error loading feedback. Please try again.</div>';
+            }
         }
 
         // Close modal on outside click

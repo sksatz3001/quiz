@@ -1150,6 +1150,40 @@ const server = http.createServer(async (req, res) => {
         return;
     }
 
+    // ============ ADMIN: GET FEEDBACK ============
+    if (req.method === 'GET' && pathname === '/api/admin/feedback') {
+        if (!isAdminAuthenticated(req)) {
+            res.writeHead(401, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'Unauthorized' }));
+            return;
+        }
+
+        try {
+            const result = await pool.query(`
+                SELECT 
+                    f.id,
+                    f.session_id,
+                    f.rating,
+                    f.feedback,
+                    f.timestamp,
+                    qr.name,
+                    qr.email,
+                    qr.phone
+                FROM feedback f
+                LEFT JOIN quiz_results qr ON f.session_id = qr.session_id
+                ORDER BY f.timestamp DESC
+            `);
+            
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify(result.rows));
+        } catch (error) {
+            console.error('Error fetching feedback:', error);
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'Failed to fetch feedback' }));
+        }
+        return;
+    }
+
     // ============ ADMIN: DELETE RESULT ============
     if (req.method === 'POST' && pathname === '/api/admin/delete') {
         if (!isAdminAuthenticated(req)) {
